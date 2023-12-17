@@ -5,7 +5,7 @@
     </q-item-section>
 
     <q-item-section>
-      <q-item-label>{{ title }}</q-item-label>
+      <q-item-label class="text-white">{{ title }}</q-item-label>
     </q-item-section>
   </q-item>
 </template>
