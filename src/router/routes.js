@@ -1,18 +1,23 @@
-import HomeView from "../views/HomeView.vue";
-import NotFound from "../views/NotFoundView.vue";
-import About from "../views/AboutView.vue";
-import Play from "../views/PlayView.vue";
-import ProfileView from "../views/ProfileView.vue";
-import CreateSession from "../views/CreateSessionView.vue";
-import JoinSession from "../views/JoinSessionView.vue";
+import IndexPage from "../pages/IndexPage.vue";
+import AboutPage from "../pages/AboutPage.vue";
+import PlayPage from "../pages/PlayPage.vue";
+import ProfilePage from "../pages/ProfilePage.vue";
+import CreateSessionPage from "../pages/CreateSessionPage.vue";
+import JoinSessionPage from "../pages/JoinSessionPage.vue";
 
 const routes = [
-  { path: "/", name: "home", component: HomeView },
-  { path: "/about", name: "about", component: About },
-  { path: "/play", name: "play", component: Play },
-  { path: "/profile", name: "profile", component: ProfileView },
-  { path: "/session", name: "session", component: CreateSession },
-  { path: "/session/join", name: "join", component: JoinSession },
+  {
+    path: '/',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', component: () => import('pages/IndexPage.vue') },
+      { path: "/about", name: "about", component: AboutPage },
+      { path: "/play", name: "play", component: PlayPage },
+      { path: "/profile", name: "profile", component: ProfilePage },
+      { path: "/session", name: "session", component: CreateSessionPage },
+      { path: "/session/join", name: "join", component: JoinSessionPage },
+    ]
+  },
   { path: '/:catchAll(.*)*', component: () => import('pages/ErrorNotFound.vue') }
 ]
 
