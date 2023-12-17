@@ -1,5 +1,5 @@
 <template>
-  <svg class="coordinates" viewBox="0 0 100 100">
+  <svg :id="id" class="coordinates" viewBox="0 0 100 100">
   </svg>
 </template>
 
@@ -35,8 +35,14 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'ChessCoordinates',
-  mounted() {
-    const svg = $('#chess-coordinates')[0];
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
+  mounted(props) {
+    const svg = $('#' + props.id)[0];
     const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
     const fileSvg = (x, y, text, color) => {
       const fileText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -45,7 +51,6 @@ export default defineComponent({
       fileText.setAttribute('class', 'coordinates-' + color + ' file');
       fileText.textContent = text;
       svg.appendChild(fileText);
-      //svg.append(`<text x="${x}%" y="${y}%" class="coordinates-${color} file">${text}</text>`);
     }
     const rankSvg = (x, y, text, color) => {
       const rankText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -54,7 +59,6 @@ export default defineComponent({
       rankText.setAttribute('class', 'coordinates-' + color + ' rank');
       rankText.textContent = text;
       svg.appendChild(rankText);
-      //svg.append(`<text x="${x}%" y="${y}%" class="coordinates-${color} rank">${text}</text>`);
     }
     for (let i = 0; i < 8; i++) {
       let file = files[i];

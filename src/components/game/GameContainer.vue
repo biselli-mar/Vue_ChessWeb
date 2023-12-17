@@ -3,7 +3,7 @@
     <div class="game-container" id="game">
       <div class="chess-layout">
         <div class="board-container">
-          <Chessboard id="chessboard" class="board visually-hidden" />
+          <Chessboard :socket="socket" id="chessboard" class="board visually-hidden" />
         </div>
       </div>
     </div>
@@ -24,24 +24,27 @@ export default defineComponent({
   },
   data() {
     return {
-      socket: undefiend,
+      socket: null,
       socketUrl: "",
       varPlayerColor: this.playerColor
     }
   },
-  mounted() {
+  setup() {
     this.socketUrl = "ws://localhost:9000/play/socket?sessionId=" + Cookies.get('CHESS_SESSION_ID');
-    this.socket = new WebSocket(this.socketUrl);
-    let _this = this;
-    this.socket.onopen = function () {
-      console.log("Socket to server opened");
-    }
-    this.socket.onerror = function (event) {
-      console.error("Socket sent error");
-      console.error(event.data);
-    }
-    this.socket.onclose = function () {
-      console.log("Closing socket");
+    let _this = this
+    this.socket = () => {
+      let _socket = new WebSocket(_this.socketUrl);
+      _socket.onopen = function () {
+        console.log("Socket to server opened");
+      }
+      _socket.onerror = function (event) {
+        console.error("Socket sent error");
+        console.error(event.data);
+      }
+      _socket.onclose = function () {
+        console.log("Closing socket");
+      }
+      return _socket;
     }
   }
 })
