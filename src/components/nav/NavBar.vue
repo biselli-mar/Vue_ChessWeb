@@ -7,6 +7,9 @@
           <q-img src="~assets/logo.png" alt="Chess Logo" height="30px" width="70px" />
         </q-item>
       </q-toolbar-title>
+      <q-space />
+      <q-toggle v-model="darkModeToggle" checked-icon="dark_mode" color="grey-8" unchecked-icon="light_mode"
+        @click="$q.dark.toggle" />
     </q-toolbar>
   </q-header>
   <q-drawer v-model="drawer" show-if-above :mini="miniState" @mouseover="miniState = false" @mouseout="miniState = true"
@@ -22,6 +25,7 @@
 
 <script>
 import { defineComponent, ref } from 'vue'
+import { useQuasar } from 'quasar'
 import NavLink from 'components/nav/NavLink.vue'
 import NavMenu from 'components/nav/NavMenu.vue'
 
@@ -65,11 +69,13 @@ export default defineComponent({
   },
 
   setup() {
+    const $q = useQuasar()
     return {
       navMenus: menuList,
       navLinks: linksList,
       drawer: ref(false),
-      miniState: ref(true)
+      miniState: ref(true),
+      darkModeToggle: ref($q.dark.isActive)
     }
   }
 })
