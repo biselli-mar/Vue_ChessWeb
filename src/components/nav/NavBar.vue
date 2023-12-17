@@ -1,7 +1,7 @@
 <template>
   <q-header elevated class="bg-primary">
     <q-toolbar>
-      <q-btn flat @click="drawer = !drawer" round dense icon="menu" />
+      <q-btn flat class="text-accent" @click="drawer = !drawer" round dense icon="menu" />
       <q-toolbar-title>
         <q-item clickable tag="a" :to="{ name: 'index' }">
           <q-img src="~assets/logo.png" alt="Chess Logo" height="30px" width="70px" />
@@ -13,7 +13,8 @@
     :width="150" :breakpoint="500" bordered class="bg-secondary">
     <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: 0 }">
       <q-list padding>
-        <NavLink v-for="link in essentialLinks" :key="link.title" v-bind="link" />
+        <NavMenu v-for="menu in navMenus" :key="menu.title" v-bind="menu" />
+        <NavLink v-for="link in navLinks" :key="link.title" v-bind="link" />
       </q-list>
     </q-scroll-area>
   </q-drawer>
@@ -22,26 +23,36 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import NavLink from 'components/nav/NavLink.vue'
+import NavMenu from 'components/nav/NavMenu.vue'
 
-const linksList = [
+const menuList = [
   {
     title: 'Play',
     icon: 'play_arrow',
-    link: 'session'
+    children: [
+      {
+        title: 'New Session',
+        icon: 'add',
+        link: 'session'
+      },
+      {
+        title: 'Join Session',
+        icon: 'group',
+        link: 'join'
+      }
+    ]
   },
-  {
-    title: 'Join',
-    icon: 'group',
-    link: 'join'
-  },
+]
+
+const linksList = [
   {
     title: 'About',
-    icon: 'info',
+    icon: 'info_outline',
     link: 'about'
   },
   {
     title: 'Profile',
-    icon: 'person',
+    icon: 'person_outline',
     link: 'profile'
   },
 ]
@@ -50,12 +61,13 @@ export default defineComponent({
   name: 'NavBar',
 
   components: {
-    NavLink
+    NavLink, NavMenu
   },
 
   setup() {
     return {
-      essentialLinks: linksList,
+      navMenus: menuList,
+      navLinks: linksList,
       drawer: ref(false),
       miniState: ref(true)
     }

@@ -10,6 +10,12 @@
   </q-item>
 </template>
 
+<style>
+.q-item {
+  color: var(--q-accent);
+}
+</style>
+
 <script>
 import { defineComponent } from 'vue'
 
@@ -23,12 +29,10 @@ export default defineComponent({
 
     link: {
       type: String,
-      default: '#'
     },
 
     icon: {
       type: String,
-      default: ''
     }
   }
 })
