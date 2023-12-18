@@ -1,5 +1,9 @@
 <template>
   <svg :id="id" class="coordinates" viewBox="0 0 100 100">
+    <text v-for="(file, index) in files" :key="index" :x="index * 12.5 + 10.8 + '%'" y="99%"
+      :class="'file coordinates-' + fileColor(index)">{{ file }}</text>
+    <text v-for="(rank, index) in ranks" :key="index" x="0.75%" :y="index * 12.5 + 3.5 + '%'"
+      :class="'rank coordinates-' + rankColor(index)">{{ rank }}</text>
   </svg>
 </template>
 
@@ -40,9 +44,25 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    forWhite: {
+      type: Boolean,
+      required: true,
+    },
   },
-  mounted(props) {
-    const svg = $('#' + props.id)[0];
+  setup(props) {
+    const whiteFiles = ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'];
+    const blackFiles = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    const whiteRanks = [1, 2, 3, 4, 5, 6, 7, 8];
+    const blackRanks = [8, 7, 6, 5, 4, 3, 2, 1];
+    return {
+      files: props.forWhite ? whiteFiles : blackFiles,
+      ranks: props.forWhite ? whiteRanks : blackRanks,
+      fileColor: (index) => (index % 2 == 0 ? 'light' : 'dark'),
+      rankColor: (index) => (index % 2 == 0 ? 'dark' : 'light'),
+    }
+  },
+  /*mounted(props) {
+    const svg = this.$el;
     const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
     const fileSvg = (x, y, text, color) => {
       const fileText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
@@ -62,11 +82,11 @@ export default defineComponent({
     }
     for (let i = 0; i < 8; i++) {
       let file = files[i];
-      if (!forWhite) {
+      if (!props.forWhite) {
         file = files[7 - i];
       }
       let rank = 8 - i;
-      if (!forWhite) {
+      if (!props.forWhite) {
         rank = i + 1;
       }
       let fileColor = 'light';
@@ -79,6 +99,6 @@ export default defineComponent({
       fileSvg(i * 12.5 + 10.8, 99, file.toString(), fileColor);
       rankSvg(0.75, i * 12.5 + 3.5, rank.toString(), rankColor);
     }
-  },
+  },*/
 });
 </script>

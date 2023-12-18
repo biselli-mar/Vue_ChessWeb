@@ -1,9 +1,12 @@
 <template>
   <q-no-ssr>
+    <div>
+      <q-chip twxt-color="white" color="secondary" icon="info" label="Loading game..." ref="sessionIdChip" />
+    </div>
     <div class="game-container" id="game">
       <div class="chess-layout">
         <div class="board-container">
-          <Chessboard :socket="socket" id="chessboard" class="board visually-hidden" />
+          <ChessBoard :socket="socket" player-color="w" id="chessboard" class="board visually-hidden" />
         </div>
       </div>
     </div>
@@ -11,29 +14,21 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { ref, defineComponent } from 'vue'
 import { Cookies } from 'quasar'
+import ChessBoard from 'src/components/game/ChessBoard.vue'
 
 export default defineComponent({
   name: 'GameContainer',
-  props: {
-    playerColor: {
-      type: String,
-      required: true
-    }
-  },
-  data() {
-    return {
-      socket: null,
-      socketUrl: "",
-      varPlayerColor: this.playerColor
-    }
+  components: {
+    ChessBoard,
   },
   setup() {
-    this.socketUrl = "ws://localhost:9000/play/socket?sessionId=" + Cookies.get('CHESS_SESSION_ID');
-    let _this = this
-    this.socket = () => {
-      let _socket = new WebSocket(_this.socketUrl);
+    const sessionIdChip = ref(null);
+
+    const socketUrl = "ws://localhost:9000/play/socket?sessionId=" + Cookies.get('CHESS_SESSION_ID');
+    function socket() {
+      let _socket = new WebSocket(socketUrl);
       _socket.onopen = function () {
         console.log("Socket to server opened");
       }
@@ -46,13 +41,18 @@ export default defineComponent({
       }
       return _socket;
     }
+    return {
+      sessionIdChip,
+      socket
+    }
   }
 })
 </script>
 
 <style lang="scss">
-@import '../../css/variables.scss';
-@import '../../css/mixins.scss';
+@use 'src/css/mixins' as *;
+@use 'src/css/variables.scss' as *;
+@use "quasar/src/css/variables" as q;
 
 $small-board-size: calc(100vw - 2rem);
 
@@ -66,7 +66,7 @@ $small-board-size: calc(100vw - 2rem);
   padding-left: 1.5rem;
   padding-right: 1.5rem;
 
-  @media screen and (min-width: $breakpoint-sm) and (min-height: $min-height-breakpoint) {
+  @media screen and (min-width: q.$breakpoint-sm) and (min-height: $min-height-breakpoint) {
     flex-direction: row;
     height: $page-size-with-footer;
 
@@ -86,7 +86,7 @@ $small-board-size: calc(100vw - 2rem);
     }
   }
 
-  @media screen and (max-width: $break-sm) {
+  @media screen and (max-width: q.$breakpoint-sm) {
     flex-direction: column;
 
     .chess-layout {

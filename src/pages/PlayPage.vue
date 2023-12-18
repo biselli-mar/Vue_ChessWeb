@@ -1,5 +1,5 @@
 <template>
-  <GameContainer :playerColor="playerColor" />
+  <GameContainer />
 </template>
 
 <script>
@@ -8,12 +8,6 @@ import GameContainer from 'components/game/GameContainer.vue'
 
 export default defineComponent({
   name: 'PlayPage',
-  props: {
-    playerColor: {
-      type: String,
-      required: true
-    }
-  },
   components: {
     GameContainer
   },
