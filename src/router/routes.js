@@ -1,5 +1,3 @@
-import IndexPage from "../pages/IndexPage.vue";
-import AboutPage from "../pages/AboutPage.vue";
 import PlayPage from "../pages/PlayPage.vue";
 import ProfilePage from "../pages/ProfilePage.vue";
 import CreateSessionPage from "../pages/CreateSessionPage.vue";
