@@ -80,7 +80,7 @@ module.exports = configure(function (/* ctx */) {
       viteVuePluginOptions: {
         template: {
           compilerOptions: {
-            isCustomElement: tag => tag.startsWith('c-')
+            isCustomElement: tag => tag === 'chessboard'
           }
         }
       },

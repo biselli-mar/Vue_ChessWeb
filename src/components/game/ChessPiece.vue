@@ -4,10 +4,10 @@
 </template>
 
 <script>
-import { defineCustomElement } from 'vue'
+import { defineComponent } from 'vue'
 import { getColRow } from 'assets/scripts/game/tiles.js'
 
-export default defineCustomElement({
+export default defineComponent({
   name: 'ChessPiece',
   props: {
     piece: {

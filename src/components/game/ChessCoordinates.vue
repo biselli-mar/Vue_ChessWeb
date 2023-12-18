@@ -23,14 +23,14 @@
   .rank {
     text-align: left;
   }
+}
 
-  &-light {
-    fill: #90ab61;
-  }
+.coordinates-light {
+  fill: #90ab61;
+}
 
-  &-dark {
-    fill: #e2f0c9;
-  }
+.coordinates-dark {
+  fill: #e2f0c9;
 }
 </style>
 
@@ -44,10 +44,7 @@ export default defineComponent({
       type: String,
       required: true,
     },
-    forWhite: {
-      type: Boolean,
-      required: true,
-    },
+    forWhite: Boolean
   },
   setup(props) {
     const whiteFiles = ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'];
@@ -57,8 +54,8 @@ export default defineComponent({
     return {
       files: props.forWhite ? whiteFiles : blackFiles,
       ranks: props.forWhite ? whiteRanks : blackRanks,
-      fileColor: (index) => (index % 2 == 0 ? 'light' : 'dark'),
-      rankColor: (index) => (index % 2 == 0 ? 'dark' : 'light'),
+      fileColor: (index) => (index % 2 == 1 ? 'light' : 'dark'),
+      rankColor: (index) => (index % 2 == 1 ? 'dark' : 'light'),
     }
   },
   /*mounted(props) {

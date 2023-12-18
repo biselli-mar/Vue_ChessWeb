@@ -1,6 +1,6 @@
 <template>
   <div class="q-pa-md">
-    <q-layout view="hHh Lpr lFf" class="shadow-2 rounded-borders">
+    <q-layout view="hHh Lpr lFf" class="rounded-borders">
       <NavBar />
       <q-page-container>
         <router-view />

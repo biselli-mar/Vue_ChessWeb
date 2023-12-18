@@ -1,12 +1,15 @@
 <template>
-  <c-chessboard :id="id" class="board visually-hidden" ref="chessBoard">
+  <chessboard :id="id" class="board" ref="chessBoard">
     <ChessCoordinates id="chess-coordinates" />
     <!--Highlight Squares-->
     <HighlightSquare id="select-highlight" ref="selectHighlight" />
     <HighlightSquare id="move-highlight-from" ref="moveHighlightFrom" />
     <HighlightSquare id="move-highlight-to" ref="moveHighlightTo" />
     <HighlightSquare check id="check-highlight" ref="checkHighlight" />
-  </c-chessboard>
+    <!--Pieces-->
+    <ChessPiece v-for="(piece, tile) in initialPieces" :key="tile" :piece="piece" :tile="tile"
+      @piece-drag-start="onPieceDragStart" @piece-drag-end="onPieceDragEnd" @piece-mouse-down="onPieceMouseDown" />
+  </chessboard>
 </template>
 
 <style lang="scss">
@@ -14,12 +17,10 @@
 </style>
 
 <script>
-import { ref, defineComponent } from 'vue';
+import { ref, defineComponent, defineCustomElement } from 'vue';
 import HighlightSquare from './HighlightSquare.vue';
 import ChessCoordinates from './ChessCoordinates.vue';
 import ChessPiece from './ChessPiece.vue';
-
-customElements.define('c-piece', ChessPiece);
 
 export default defineComponent({
   name: 'ChessBoard',
@@ -60,6 +61,18 @@ export default defineComponent({
   components: {
     HighlightSquare,
     ChessCoordinates,
+    ChessPiece,
+  },
+  methods: {
+    onPieceDragStart(eventData) {
+
+    },
+    onPieceDragEnd(eventData) {
+
+    },
+    onPieceMouseDown(eventData) {
+
+    },
   },
   setup(props) {
     const chessBoard = ref(null);
@@ -67,6 +80,9 @@ export default defineComponent({
     const moveHighlightFrom = ref(null);
     const moveHighlightTo = ref(null);
     const checkHighlight = ref(null);
+    const initialPieces = {
+      "A1": "wr", "A2": "wp", "A7": "bp", "A8": "br", "B1": "wn", "B2": "wp", "B7": "bp", "B8": "bn", "C1": "wb", "C2": "wp", "C7": "bp", "C8": "bb", "D1": "wq", "D2": "wp", "D7": "bp", "D8": "bq", "E1": "wk", "E2": "wp", "E7": "bp", "E8": "bk", "F1": "wb", "F2": "wp", "F7": "bp", "F8": "bb", "G1": "wn", "G2": "wp", "G7": "bp", "G8": "bn", "H1": "wr", "H2": "wp", "H7": "bp", "H8": "br",
+    }
 
     if (props.playerColor === 'b') {
       chessBoard.value.classList.add('flipped');
@@ -77,9 +93,14 @@ export default defineComponent({
       moveHighlightFrom,
       moveHighlightTo,
       checkHighlight,
+      initialPieces
     }
   },
+  emits: [
+    'gameStarted',
+  ],
   mounted(props) {
+
     //this.gameOverModal = $('#game-over-modal');
     //this.gameOverModalIcon = $('#game-over-modal-icon');
     //this.gameOverModalText = $('#game-over-modal-text');
@@ -107,13 +128,12 @@ export default defineComponent({
             console.log("Received move data: " + data);
             //TODO _this.processMove(data);
           } else {
+            _this.$emit('gameStarted');
             console.log("Initializing board: " + data);
-            _this.sessionIdDisplay.addClass('visually-hidden');
             _this.position = data;
             console.log(data["pieces"]);
             console.log(data["legal-moves"]);
             console.log(data["player-color"]);
-            fillBoard(data["pieces"], data["player-color"]);
             if (data["player-color"] === data["state"]["color"]) {
               _this.waitingTurn = false;
               _this.legalMoves = data["legal-moves"];
@@ -129,19 +149,6 @@ export default defineComponent({
         }
       }
     };
-    function fillBoard(pieces, playerColor) {
-      for (const [tile, piece] of Object.entries(pieces)) {
-        this.chessBoard.value.appendChild(new ChessPiece({
-          propsData: {
-            piece: piece,
-            tile: tile,
-          },
-        }));
-      }
-      if (playerColor === 'b') {
-        chessBoard.value.addClass('flipped');
-      }
-    }
   },
 });
 </script>
