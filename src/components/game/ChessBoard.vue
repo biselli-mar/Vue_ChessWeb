@@ -8,7 +8,7 @@
     <HighlightSquare check id="check-highlight" ref="checkHighlight" />
     <!--Pieces-->
     <ChessPiece v-for="(piece, tile) in initialPieces" :key="tile" :piece="piece" :tile="tile"
-      @piece-drag-start="onPieceDragStart" @piece-drag-end="onPieceDragEnd" @piece-mouse-down="onPieceMouseDown" />
+      @piece-mouse-down="onPieceMouseDown" ref="pieceRefs" />
   </chessboard>
 </template>
 
@@ -43,7 +43,8 @@ export default defineComponent({
       animationDuration: 350,
       animateState: false,
       waitingTurn: true,
-      varSocket: this.socket()
+      varSocket: this.socket(),
+      pieceRefMap: {},
     };
   },
   props: {
@@ -62,42 +63,40 @@ export default defineComponent({
     ChessPiece,
   },
   methods: {
-    onPieceDragStart(eventData) {
-
-    },
-    onPieceDragEnd(eventData) {
-
-    },
     onPieceMouseDown(eventData) {
       if (this.waitingTurn) {
         return;
       }
+      this.removeHints();
+      this.selectHighlight.show(eventData.tile);
+      if (this.legalMoves[eventData.tile] !== undefined) {
+        this.createHints(eventData.tile, this.legalMoves[eventData.tile]);
+      }
+    },
+    removeHints() {
       for (let hintSquare of this.chessBoard.querySelectorAll('c-hint')) {
         hintSquare.remove();
       }
-      this.selectHighlight.show(eventData.tile);
-      if (this.legalMoves[eventData.tile] !== undefined) {
-        for (let move of this.legalMoves[eventData.tile]) {
-          console.log("Showing hint for move: " + move);
-          let hintSquare = new HintSquareEl({
-            tile: move,
-            capture: this.position["pieces"][move] !== undefined,
-          });
-          hintSquare.addEventListener('hintDrop', (event) => {
-            console.log("Hint drop: " + event.detail[0].tile);
-            console.log(event);
-          });
-          hintSquare.addEventListener('hintClick', (event) => {
-            console.log("Hint click: " + event.detail[0].tile);
-            console.log(event);
-          });
-
-          console.log(hintSquare);
-          this.chessBoard.appendChild(hintSquare);
-        }
-      }
-
     },
+    createHints(srcTile, moves) {
+      for (let move of moves) {
+        let hintSquare = new HintSquareEl({
+          tile: move,
+          capture: this.position["pieces"][move] !== undefined,
+        });
+        hintSquare.addEventListener('hintDrop', (event) => {
+          this.move(srcTile, event.detail[0].tile);
+        });
+        hintSquare.addEventListener('hintClick', (event) => {
+          this.move(srcTile, event.detail[0].tile);
+        });
+
+        this.chessBoard.appendChild(hintSquare);
+      }
+    },
+    move(from, to) {
+      this.removeHints();
+    }
   },
   async setup(props) {
     const getPlayerColorUrl = 'http://localhost:9000/session/player-color?sessionId=' + Cookies.get('CHESS_SESSION_ID') + '&playerId=' + Cookies.get('CHESS_PLAYER_ID');
@@ -115,6 +114,7 @@ export default defineComponent({
     const moveHighlightFrom = ref(null);
     const moveHighlightTo = ref(null);
     const checkHighlight = ref(null);
+    const pieceRefs = ref([]);
     const initialPieces = {
       "A1": "wr", "A2": "wp", "A7": "bp", "A8": "br", "B1": "wn", "B2": "wp", "B7": "bp", "B8": "bn", "C1": "wb", "C2": "wp", "C7": "bp", "C8": "bb", "D1": "wq", "D2": "wp", "D7": "bp", "D8": "bq", "E1": "wk", "E2": "wp", "E7": "bp", "E8": "bk", "F1": "wb", "F2": "wp", "F7": "bp", "F8": "bb", "G1": "wn", "G2": "wp", "G7": "bp", "G8": "bn", "H1": "wr", "H2": "wp", "H7": "bp", "H8": "br",
     }
@@ -129,6 +129,7 @@ export default defineComponent({
       moveHighlightFrom,
       moveHighlightTo,
       checkHighlight,
+      pieceRefs,
       initialPieces,
       playerColor
     }
@@ -145,6 +146,10 @@ export default defineComponent({
     //this.moveSound = $('#move-sound')[0];
     //this.captureSound = $('#capture-sound')[0];
     //this.checkSound = $('#check-sound')[0];
+
+    for (let piece of this.pieceRefs) {
+      this.pieceRefMap[piece.tile] = piece;
+    }
 
     let _this = this;
     this.varSocket.onmessage = function (event) {

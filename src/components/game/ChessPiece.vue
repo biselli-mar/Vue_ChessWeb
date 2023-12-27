@@ -1,6 +1,6 @@
 <template>
-  <div :class="classStr" :id="idStr" draggable="true" @dragstart="emitEventObject('pieceDragStart')"
-    @dragend="emitEventObject('pieceDragEnd')" @mousedown="emitEventObject('pieceMouseDown')"></div>
+  <div :class="classStr" :id="idStr" draggable="true" @dragstart="onDragStart($event)" @dragend="onDragEnd"
+    @mousedown="evEmit($event, 'pieceMouseDown')"></div>
 </template>
 
 <script>
@@ -24,18 +24,38 @@ export default defineComponent({
     'pieceDragEnd',
     'pieceMouseDown',
   ],
+  methods: {
+    onDragStart(event) {
+      const piece = this.$el;
+      piece.classList.add('visually-hidden');
+
+      const pieceImageSrc = window.getComputedStyle(piece).backgroundImage;
+      const pieceWidth = piece.offsetWidth;
+
+      const dragImage = document.createElement('img');
+      dragImage.src = pieceImageSrc.substring(5, pieceImageSrc.length - 2); // remove `url("` and `")`
+      dragImage.width = pieceWidth;
+
+      event.dataTransfer.setDragImage(dragImage, pieceWidth, pieceWidth);
+    },
+    onDragEnd() {
+      this.$el.classList.remove('visually-hidden');
+    }
+  },
   setup(props, ctx) {
     const colRowTile = getColRow(props.tile)
-    function emitEventObject(trigger) {
-      return ctx.emit(trigger, {
-        piece: props.piece,
-        tile: props.tile,
+    function evEmit(event, trigger) {
+      ctx.emit(trigger, {
+        event: event,
+        piece: this.piece,
+        tile: this.tile,
       });
     }
     return {
       classStr: 'piece ' + props.piece + ' square-' + colRowTile,
       idStr: props.piece + '-' + colRowTile,
-      emitEventObject,
+      evEmit,
+      ctx,
     }
   }
 })
