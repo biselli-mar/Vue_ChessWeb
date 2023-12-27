@@ -1,16 +1,13 @@
 @use "../variables" as *;
+@use "squares" as *;
 
 $piece-path: "/img/pieces";
 
 .piece {
+  @include square;
   background-size: 100%;
   z-index: $piece-z-index;
   cursor: grab;
-  height: 12.5%;
-  width: 12.5%;
-  left: 0;
-  position: absolute;
-  top: 0;
   touch-action: none;
   user-select: none;
   will-change: transform;

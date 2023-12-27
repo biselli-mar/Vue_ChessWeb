@@ -19,16 +19,18 @@ export default defineComponent({
       required: true,
     }
   },
-  setup(props) {
+  emits: [
+    'pieceDragStart',
+    'pieceDragEnd',
+    'pieceMouseDown',
+  ],
+  setup(props, ctx) {
     const colRowTile = getColRow(props.tile)
     function emitEventObject(trigger) {
-      return (event) => {
-        $emit(trigger, {
-          event: event,
-          piece: props.piece,
-          tile: props.tile,
-        });
-      }
+      return ctx.emit(trigger, {
+        piece: props.piece,
+        tile: props.tile,
+      });
     }
     return {
       classStr: 'piece ' + props.piece + ' square-' + colRowTile,

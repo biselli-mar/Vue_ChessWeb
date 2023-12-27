@@ -1,6 +1,6 @@
 <template>
-  <chessboard :id="id" class="board" ref="chessBoard">
-    <ChessCoordinates id="chess-coordinates" />
+  <chessboard :id="id" :class="chessBoardClass" ref="chessBoard">
+    <ChessCoordinates id="chess-coordinates" :player-color="playerColor" />
     <!--Highlight Squares-->
     <HighlightSquare id="select-highlight" ref="selectHighlight" />
     <HighlightSquare id="move-highlight-from" ref="moveHighlightFrom" />
@@ -18,6 +18,7 @@
 
 <script>
 import { ref, defineComponent, defineCustomElement } from 'vue';
+import { Cookies } from 'quasar'
 import HighlightSquare from './HighlightSquare.vue';
 import ChessCoordinates from './ChessCoordinates.vue';
 import ChessPiece from './ChessPiece.vue';
@@ -41,7 +42,7 @@ export default defineComponent({
       animationDuration: 350,
       animateState: false,
       waitingTurn: true,
-      varSocket: this.socket(),
+      varSocket: this.socket()
     };
   },
   props: {
@@ -52,11 +53,7 @@ export default defineComponent({
     socket: {
       type: Function,
       required: true,
-    },
-    playerColor: {
-      type: String,
-      required: true,
-    },
+    }
   },
   components: {
     HighlightSquare,
@@ -71,10 +68,20 @@ export default defineComponent({
 
     },
     onPieceMouseDown(eventData) {
-
+      this.selectHighlight.show(eventData.tile);
     },
   },
-  setup(props) {
+  async setup(props) {
+    const getPlayerColorUrl = 'http://localhost:9000/session/player-color?sessionId=' + Cookies.get('CHESS_SESSION_ID') + '&playerId=' + Cookies.get('CHESS_PLAYER_ID');
+    const playerColorPromise = await fetch(getPlayerColorUrl);
+    let playerColor = ''
+    if (playerColorPromise.ok) {
+      const responseJson = await playerColorPromise.json();
+      playerColor = responseJson.color;
+    } else {
+      console.error("Error getting player color: " + playerColorPromise.status);
+    }
+
     const chessBoard = ref(null);
     const selectHighlight = ref(null);
     const moveHighlightFrom = ref(null);
@@ -83,17 +90,19 @@ export default defineComponent({
     const initialPieces = {
       "A1": "wr", "A2": "wp", "A7": "bp", "A8": "br", "B1": "wn", "B2": "wp", "B7": "bp", "B8": "bn", "C1": "wb", "C2": "wp", "C7": "bp", "C8": "bb", "D1": "wq", "D2": "wp", "D7": "bp", "D8": "bq", "E1": "wk", "E2": "wp", "E7": "bp", "E8": "bk", "F1": "wb", "F2": "wp", "F7": "bp", "F8": "bb", "G1": "wn", "G2": "wp", "G7": "bp", "G8": "bn", "H1": "wr", "H2": "wp", "H7": "bp", "H8": "br",
     }
-
-    if (props.playerColor === 'b') {
-      chessBoard.value.classList.add('flipped');
+    let chessBoardClass = 'board';
+    if (playerColor === 'b') {
+      chessBoardClass += ' flipped';
     }
     return {
       chessBoard,
+      chessBoardClass,
       selectHighlight,
       moveHighlightFrom,
       moveHighlightTo,
       checkHighlight,
-      initialPieces
+      initialPieces,
+      playerColor
     }
   },
   emits: [
@@ -109,7 +118,6 @@ export default defineComponent({
     //this.moveSound = $('#move-sound')[0];
     //this.captureSound = $('#capture-sound')[0];
     //this.checkSound = $('#check-sound')[0];
-    //this.sessionIdDisplay = $('#sessionIdDisplay');
 
     let _this = this;
     this.varSocket.onmessage = function (event) {
