@@ -17,7 +17,8 @@
 </style>
 
 <script>
-import { ref, defineComponent, defineCustomElement } from 'vue';
+import { ref, defineComponent } from 'vue';
+import { HintSquareEl } from 'assets/scripts/customElements.js';
 import { Cookies } from 'quasar'
 import HighlightSquare from './HighlightSquare.vue';
 import ChessCoordinates from './ChessCoordinates.vue';
@@ -68,7 +69,34 @@ export default defineComponent({
 
     },
     onPieceMouseDown(eventData) {
+      if (this.waitingTurn) {
+        return;
+      }
+      for (let hintSquare of this.chessBoard.querySelectorAll('c-hint')) {
+        hintSquare.remove();
+      }
       this.selectHighlight.show(eventData.tile);
+      if (this.legalMoves[eventData.tile] !== undefined) {
+        for (let move of this.legalMoves[eventData.tile]) {
+          console.log("Showing hint for move: " + move);
+          let hintSquare = new HintSquareEl({
+            tile: move,
+            capture: this.position["pieces"][move] !== undefined,
+          });
+          hintSquare.addEventListener('hintDrop', (event) => {
+            console.log("Hint drop: " + event.detail[0].tile);
+            console.log(event);
+          });
+          hintSquare.addEventListener('hintClick', (event) => {
+            console.log("Hint click: " + event.detail[0].tile);
+            console.log(event);
+          });
+
+          console.log(hintSquare);
+          this.chessBoard.appendChild(hintSquare);
+        }
+      }
+
     },
   },
   async setup(props) {
@@ -109,7 +137,6 @@ export default defineComponent({
     'gameStarted',
   ],
   mounted(props) {
-
     //this.gameOverModal = $('#game-over-modal');
     //this.gameOverModalIcon = $('#game-over-modal-icon');
     //this.gameOverModalText = $('#game-over-modal-text');
