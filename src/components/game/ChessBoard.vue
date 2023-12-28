@@ -8,7 +8,7 @@
     <HighlightSquare id="move-highlight-to" ref="moveHighlightTo" />
     <HighlightSquare check id="check-highlight" ref="checkHighlight" />
     <!--Pieces-->
-    <ChessPiece v-for="(piece, tile) in initialPieces" :key="tile" :piece="piece" :tile="tile"
+    <ChessPiece v-for="(piece, tile) in initialPieces" :key="tile" :piece="piece" :tile="tile" :player-color="playerColor"
       @piece-mouse-down="onPieceMouseDown" ref="pieceRefs" />
     <!--Hints-->
   </chessboard>
@@ -21,7 +21,8 @@
 <script>
 import { ref, defineComponent } from 'vue';
 import { HintSquareEl } from 'assets/scripts/customElements.js';
-import { Cookies } from 'quasar'
+import { Cookies } from 'quasar';
+import { getPositionDiff } from 'assets/scripts/game/position.js';
 import HighlightSquare from './HighlightSquare.vue';
 import ChessCoordinates from './ChessCoordinates.vue';
 import ChessPiece from './ChessPiece.vue';
@@ -71,8 +72,9 @@ export default defineComponent({
       }
       this.removeHints();
       this.selectHighlight.show(eventData.tile);
-      if (this.legalMoves[eventData.tile] !== undefined) {
-        this.createHints(eventData.tile, this.legalMoves[eventData.tile]);
+      const moves = this.legalMoves[eventData.tile];
+      if (moves !== undefined) {
+        this.createHints(eventData.tile, moves);
       }
     },
     removeHints() {
@@ -83,14 +85,18 @@ export default defineComponent({
     createHints(srcTile, moves) {
       for (let move of moves) {
         let hintSquare = new HintSquareEl({
-          tile: move,
+          srcTile: srcTile,
+          targetTile: move,
           capture: this.position["pieces"][move] !== undefined,
+          playerColor: this.playerColor,
         });
         hintSquare.addEventListener('hintDrop', (event) => {
-          this.move(srcTile, event.detail[0].tile);
+          this.animateState = false;
+          this.move(srcTile, move);
         });
         hintSquare.addEventListener('hintClick', (event) => {
-          this.move(srcTile, event.detail[0].tile);
+          this.animateState = true;
+          this.move(srcTile, move);
         });
 
         this.chessBoard.appendChild(hintSquare);
@@ -98,6 +104,106 @@ export default defineComponent({
     },
     move(from, to) {
       this.removeHints();
+      this.selectHighlight.hide();
+
+      const move = {
+        from: from,
+        to: to,
+        playerId: Cookies.get('CHESS_PLAYER_ID'),
+      };
+
+      this.varSocket.send(JSON.stringify(move));
+    },
+    processMove(gameData) {
+      const from = gameData["move"]["from"];
+      const to = gameData["move"]["to"];
+
+      const fromPieceRef = this.pieceRefMap[from];
+      const toPieceRef = this.pieceRefMap[to];
+
+      const oldFromPiece = this.position["pieces"][from];
+      const newToPiece = gameData["pieces"][to];
+      if (oldFromPiece !== newToPiece) { // promotion
+        fromPieceRef.promote(newToPiece);
+        this.position["pieces"][from] = newToPiece;
+      }
+
+      const diff = getPositionDiff(this.position["pieces"], gameData["pieces"]);
+      console.log(diff);
+
+      console.log(this.pieceRefMap);
+
+      for (const [fromTile, toTile] of Object.entries(diff.moved)) {
+        this.pieceRefMap[fromTile].move(toTile, this.animateState);
+        this.pieceRefMap[toTile] = this.pieceRefMap[fromTile];
+        delete this.pieceRefMap[fromTile];
+      }
+
+      let indirectCapture = false;
+      for (const [tile, piece] of Object.entries(diff.captured)) {
+        if (piece !== undefined) {
+          this.pieceRefMap[tile].hide();
+          indirectCapture = true;
+        }
+      }
+
+      if (this.position["pieces"][to] !== undefined) { // regular capture
+        toPieceRef.hide();
+        //this.captureSound.play();
+      }
+      else if (indirectCapture) { // indirect capture (en passant)
+        //this.captureSound.play();
+      }
+      else {
+        //this.moveSound.play();
+      }
+
+      const turnColorKing = gameData["state"]["color"] + 'k';
+      let kingRef = undefined;
+      for (const [tile, pieceRef] of Object.entries(this.pieceRefMap)) {
+        if (pieceRef.piece === turnColorKing) {
+          kingRef = pieceRef;
+          break;
+        }
+      }
+      if (kingRef === undefined) {
+        console.error("King not found");
+      } else {
+        if (gameData["check"]) {
+          //this.checkSound.play();
+          this.checkHighlight.show(kingRef.tile);
+        } else {
+          this.checkHighlight.hide();
+        }
+      }
+
+      /*
+      if (gameData["game-state"] == 'CHECKMATE') {
+        this.gameOverModalTitle.text('Checkmate');
+        const whiteWon = turnColor == 'b';
+        this.gameOverModalIcon.addClass(whiteWon ? 'wk' : 'bk');
+        this.gameOverModalText.text((whiteWon ? 'White' : 'Black') + ' wins!');
+        this.gameOverModal.modal('toggle');
+      } else if (gameData["game-state"] == 'DRAW') {
+        this.gameOverModalTitle.text('Draw');
+        this.gameOverModalText.text('The game ended in a draw');
+        this.gameOverModal.modal('toggle');
+      }
+      */
+
+      this.position = gameData;
+      this.animateState = false;
+
+      if (this.playerColor === gameData["state"]["color"]) {
+        this.legalMoves = gameData["legal-moves"];
+        this.waitingTurn = false;
+      } else {
+        this.legalMoves = {};
+        this.waitingTurn = true;
+      }
+
+      this.moveHighlightFrom.show(from);
+      this.moveHighlightTo.show(to);
     }
   },
   async setup(props) {
@@ -155,7 +261,6 @@ export default defineComponent({
 
     let _this = this;
     this.varSocket.onmessage = function (event) {
-      console.log("Socket received data: " + event.data)
       if (event.data === 'Wait for opponent') {
         console.log("Waiting for opponent; start keep alive");
         _this.varSocket.send('Keep alive');
@@ -164,18 +269,12 @@ export default defineComponent({
         console.log("Keep alive");
       } else {
         const data = JSON.parse(event.data);
-        console.log("Received different data:" + data);
         if (data["error"] === undefined) {
           if (data["move"] !== undefined) {
-            console.log("Received move data: " + data);
-            //TODO _this.processMove(data);
+            _this.processMove(data);
           } else {
             _this.$emit('gameStarted');
-            console.log("Initializing board: " + data);
             _this.position = data;
-            console.log(data["pieces"]);
-            console.log(data["legal-moves"]);
-            console.log(data["player-color"]);
             if (data["player-color"] === data["state"]["color"]) {
               _this.waitingTurn = false;
               _this.legalMoves = data["legal-moves"];

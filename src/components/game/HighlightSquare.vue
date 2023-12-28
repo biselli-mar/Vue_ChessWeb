@@ -39,6 +39,11 @@ export default defineComponent({
     },
     hide() {
       this.$el.classList.add('visually-hidden');
+      for (let className of this.$el.classList) {
+        if (className.startsWith('square-')) {
+          this.$el.classList.remove(className);
+        }
+      }
     },
   },
 });
