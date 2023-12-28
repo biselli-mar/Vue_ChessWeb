@@ -1,5 +1,6 @@
 <template>
   <chessboard :id="id" :class="chessBoardClass" ref="chessBoard">
+    <!--Coordinates-->
     <ChessCoordinates id="chess-coordinates" :player-color="playerColor" />
     <!--Highlight Squares-->
     <HighlightSquare id="select-highlight" ref="selectHighlight" />
@@ -9,6 +10,7 @@
     <!--Pieces-->
     <ChessPiece v-for="(piece, tile) in initialPieces" :key="tile" :piece="piece" :tile="tile"
       @piece-mouse-down="onPieceMouseDown" ref="pieceRefs" />
+    <!--Hints-->
   </chessboard>
 </template>
 
