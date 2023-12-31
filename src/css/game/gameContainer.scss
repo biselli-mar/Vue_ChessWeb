@@ -60,4 +60,5 @@ $small-board-size: 100%;
 #sessionIdDisplay {
   display: inline-flex;
   position: absolute;
+  z-index: 100;
 }

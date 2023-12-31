@@ -1,8 +1,13 @@
 <template>
-  <!-- Card component shown in IndexPage to route to /session and /session/join -->
-  <q-btn color="primary" @click="joinSession($router)">
-    Join Session
-  </q-btn>
+  <q-item class="c-item" clickable @click="joinSession($router)">
+    <q-card class="c-card">
+      <q-img src="https://picsum.photos/500/300">
+        <div class="absolute-bottom">
+          <div class="text-h6">Join a Session</div>
+        </div>
+      </q-img>
+    </q-card>
+  </q-item>
 </template>
 
 <script>

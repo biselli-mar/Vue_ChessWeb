@@ -1,8 +1,13 @@
 <template>
-  <!-- Card component shown in IndexPage to route to /session and /session/join -->
-  <q-btn color="primary" @click="createSession($router)">
-    Create Session
-  </q-btn>
+  <q-item class="c-item" clickable @click="createSession">
+    <q-card class="c-card">
+      <q-img src="https://picsum.photos/500/300">
+        <div class="absolute-bottom">
+          <div class="text-h6">Start a new Session</div>
+        </div>
+      </q-img>
+    </q-card>
+  </q-item>
 </template>
 
 <script>
@@ -21,7 +26,7 @@ export default defineComponent({
   setup(props) {
     const $q = useQuasar();
     return {
-      createSession(router) {
+      createSession() {
         $q.dialog({
           component: CreateSessionDialog,
           componentProps: {

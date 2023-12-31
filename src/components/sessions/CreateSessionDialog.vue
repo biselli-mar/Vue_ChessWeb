@@ -15,7 +15,7 @@
       </q-card-actions>
       <q-separator />
       <q-card-actions align="right">
-        <q-btn color="primary" label="Cancel" @click="onCancelClick" />
+        <q-btn label="Cancel" @click="onCancelClick" />
       </q-card-actions>
     </q-card>
   </q-dialog>
