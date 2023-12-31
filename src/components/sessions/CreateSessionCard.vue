@@ -11,15 +11,21 @@ import { useQuasar } from 'quasar';
 import CreateSessionDialog from './CreateSessionDialog.vue'
 
 export default defineComponent({
-  name: 'NewSessionCard',
-  setup() {
+  name: 'CreateSessionCard',
+  props: {
+    serverUrl: {
+      type: String,
+      required: true,
+    },
+  },
+  setup(props) {
     const $q = useQuasar();
     return {
       createSession(router) {
         $q.dialog({
           component: CreateSessionDialog,
           componentProps: {
-            serverUrl: "http://localhost:9000/session",
+            serverUrl: props.serverUrl,
           },
         });
       }
