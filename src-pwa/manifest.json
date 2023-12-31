@@ -1,5 +1,6 @@
 {
   "name": "HTWG ChessWeb",
+  "lang": "en-US",
   "short_name": "Chess",
   "description": "A chess game for the web; written in Scala with Play Framework and Vue.js",
   "start_url": "../index.html",
