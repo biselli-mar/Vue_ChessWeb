@@ -1,5 +1,14 @@
 {
-  "orientation": "portrait",
+  "name": "HTWG ChessWeb",
+  "short_name": "Chess",
+  "description": "A chess game for the web; written in Scala with Play Framework and Vue.js",
+  "start_url": "../index.html",
+  "id": "de.htwg.wa.chessweb",
+  "dir": "ltr",
+  "categories": ["games", "entertainment", "online"],
+  "prefer_related_applications": false,
+  "display": "standalone",
+  "orientation": "any",
   "theme_color": "#45524b",
   "background_color": "#020d0f",
   "icons": [
