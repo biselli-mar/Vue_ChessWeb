@@ -1,3 +1,4 @@
+import IndexPage from "../pages/IndexPage.vue";
 import PlayPage from "../pages/PlayPage.vue";
 import ProfilePage from "../pages/ProfilePage.vue";
 import CreateSessionPage from "../pages/CreateSessionPage.vue";
@@ -8,7 +9,7 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', name: "index", component: () => import('pages/IndexPage.vue') },
+      { path: '', name: "index", component: IndexPage },
       { path: "/about", name: "about", component: () => import('pages/AboutPage.vue') },
       { path: "/play", name: "play", component: PlayPage },
       { path: "/profile", name: "profile", component: ProfilePage },
