@@ -60,7 +60,6 @@ export default defineComponent({
       classes += ' hint-move';
     }
 
-
     function emitEvent(trigger) {
       ctx.emit(trigger, {
         srcTile: props.srcTile,

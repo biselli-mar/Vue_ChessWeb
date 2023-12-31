@@ -2,6 +2,8 @@
   <chessboard :id="id" :class="chessBoardClass" ref="chessBoard">
     <!--Coordinates-->
     <ChessCoordinates id="chess-coordinates" :player-color="playerColor" />
+    <!--Sounds-->
+    <audio v-for="sound in audioFiles" :key="sound.id" :id="sound.id" :src="sound.src" preload="auto" ref="audioRefs" />
     <!--Highlight Squares-->
     <HighlightSquare id="select-highlight" ref="selectHighlight" />
     <HighlightSquare id="move-highlight-from" ref="moveHighlightFrom" />
@@ -27,6 +29,12 @@ import HighlightSquare from './HighlightSquare.vue';
 import ChessCoordinates from './ChessCoordinates.vue';
 import ChessPiece from './ChessPiece.vue';
 
+const audioFiles = [
+  { id: 'move-sound', src: '/sounds/move.mp3' },
+  { id: 'capture-sound', src: '/sounds/capture.mp3' },
+  { id: 'check-sound', src: '/sounds/check.mp3' },
+];
+
 export default defineComponent({
   name: 'ChessBoard',
   data() {
@@ -36,9 +44,6 @@ export default defineComponent({
       gameOverModalText: undefined,
       gameOverModalTitle: undefined,
       gameOverModalButton: undefined,
-      moveSound: undefined,
-      captureSound: undefined,
-      checkSound: undefined,
       sessionIdDisplay: undefined,
       fileChars: 'ABCDEFGH',
       position: {},
@@ -48,6 +53,7 @@ export default defineComponent({
       waitingTurn: true,
       varSocket: this.socket(),
       pieceRefMap: {},
+      audioRefMap: {},
     };
   },
   props: {
@@ -102,6 +108,9 @@ export default defineComponent({
         this.chessBoard.appendChild(hintSquare);
       }
     },
+    playSound(soundId) {
+      this.audioRefMap[soundId].play();
+    },
     move(from, to) {
       this.removeHints();
       this.selectHighlight.hide();
@@ -149,13 +158,13 @@ export default defineComponent({
 
       if (this.position["pieces"][to] !== undefined) { // regular capture
         toPieceRef.hide();
-        //this.captureSound.play();
+        this.playSound('capture-sound');
       }
       else if (indirectCapture) { // indirect capture (en passant)
-        //this.captureSound.play();
+        this.playSound('capture-sound');
       }
       else {
-        //this.moveSound.play();
+        this.playSound('move-sound');
       }
 
       const turnColorKing = gameData["state"]["color"] + 'k';
@@ -170,8 +179,8 @@ export default defineComponent({
         console.error("King not found");
       } else {
         if (gameData["check"]) {
-          //this.checkSound.play();
-          this.checkHighlight.show(kingRef.tile);
+          this.playSound('check-sound');
+          this.checkHighlight.show(kingRef.getTile());
         } else {
           this.checkHighlight.hide();
         }
@@ -223,6 +232,7 @@ export default defineComponent({
     const moveHighlightTo = ref(null);
     const checkHighlight = ref(null);
     const pieceRefs = ref([]);
+    const audioRefs = ref([]);
     const initialPieces = {
       "A1": "wr", "A2": "wp", "A7": "bp", "A8": "br", "B1": "wn", "B2": "wp", "B7": "bp", "B8": "bn", "C1": "wb", "C2": "wp", "C7": "bp", "C8": "bb", "D1": "wq", "D2": "wp", "D7": "bp", "D8": "bq", "E1": "wk", "E2": "wp", "E7": "bp", "E8": "bk", "F1": "wb", "F2": "wp", "F7": "bp", "F8": "bb", "G1": "wn", "G2": "wp", "G7": "bp", "G8": "bn", "H1": "wr", "H2": "wp", "H7": "bp", "H8": "br",
     }
@@ -238,8 +248,10 @@ export default defineComponent({
       moveHighlightTo,
       checkHighlight,
       pieceRefs,
+      audioRefs,
       initialPieces,
-      playerColor
+      playerColor,
+      audioFiles,
     }
   },
   emits: [
@@ -257,6 +269,11 @@ export default defineComponent({
 
     for (let piece of this.pieceRefs) {
       this.pieceRefMap[piece.tile] = piece;
+    }
+
+    for (let audio of this.audioRefs) {
+      audio.volume = 0.1;
+      this.audioRefMap[audio.id] = audio;
     }
 
     let _this = this;
@@ -283,7 +300,6 @@ export default defineComponent({
               _this.legalMoves = {};
             }
           }
-
         } else {
           console.error("Socket sent error: " + data["error"]);
           alert(data["error"]);

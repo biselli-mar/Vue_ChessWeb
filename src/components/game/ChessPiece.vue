@@ -1,6 +1,6 @@
 <template>
   <div :class="classStr" :id="idStr" draggable="true" @dragstart="onDragStart($event)" @dragend="onDragEnd"
-    @mousedown="evEmit($event, 'pieceMouseDown')"></div>
+    @mousedown="evEmit(ctx, $event, 'pieceMouseDown')"></div>
 </template>
 
 <script>
@@ -59,6 +59,9 @@ export default defineComponent({
         this.$el.classList.remove('visually-hidden');
       }, 10);
     },
+    getTile() {
+      return this.varTile;
+    },
     hide() {
       this.$el.classList.add('visually-hidden');
     },
@@ -96,20 +99,19 @@ export default defineComponent({
       this.$el.id = piece + '-' + getColRow(this.varTile);
       this.varPiece = piece;
     },
-  },
-  setup(props, ctx) {
-    const colRowTile = getColRow(props.tile)
-    function evEmit(event, trigger) {
+    evEmit(ctx, event, trigger) {
       ctx.emit(trigger, {
         event: event,
-        piece: this.piece,
-        tile: this.tile,
+        piece: this.varPiece,
+        tile: this.varTile,
       });
-    }
+    },
+  },
+  setup(props, ctx) {
+    const colRowTile = getColRow(props.tile);
     return {
       classStr: 'piece ' + props.piece + ' square-' + colRowTile,
       idStr: props.piece + '-' + colRowTile,
-      evEmit,
       ctx,
     }
   }
