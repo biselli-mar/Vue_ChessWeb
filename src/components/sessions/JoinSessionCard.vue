@@ -52,7 +52,7 @@ export default defineComponent({
       joinSession(router) {
         $q.dialog({
           title: 'Join Session',
-          message: 'Enter the session id to join',
+          message: 'Enter the session ID to join',
           prompt: {
             model: '',
             type: 'text',

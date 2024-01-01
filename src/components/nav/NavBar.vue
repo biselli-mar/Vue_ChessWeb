@@ -1,5 +1,5 @@
 <template>
-  <q-header elevated class="bg-primary">
+  <q-header class="bg-primary">
     <q-toolbar>
       <q-btn flat class="text-accent" @click="drawer = !drawer" round dense icon="menu" />
       <q-toolbar-title>
