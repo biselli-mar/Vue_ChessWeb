@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh lpR fff">
+  <q-layout class="mobile-layout" view="hHh lpR fff">
     <MobileNavBar />
     <q-page-container>
       <router-view />
@@ -7,9 +7,19 @@
   </q-layout>
 </template>
 
-<style>
-:root {
-  font-size: xx-small;
+<style lang="scss">
+@use "quasar/src/css/variables" as q;
+
+@media screen and (max-width: q.$breakpoint-xs-max) {
+  .card-text {
+    font-size: 3vw !important;
+  }
+}
+
+.mobile-layout {
+  .card-text {
+    font-size: large;
+  }
 }
 </style>
 
