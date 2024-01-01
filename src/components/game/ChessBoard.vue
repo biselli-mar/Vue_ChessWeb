@@ -16,7 +16,7 @@
   </chessboard>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @use 'src/css/game/squares.scss';
 </style>
 

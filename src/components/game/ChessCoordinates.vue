@@ -7,7 +7,7 @@
   </svg>
 </template>
 
-<style>
+<style scoped>
 .coordinates {
   left: 0;
   top: 0;
