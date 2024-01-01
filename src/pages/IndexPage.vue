@@ -1,10 +1,18 @@
 <template>
-  <q-img src="~assets/logo.png" alt="Chess Logo" style="height: 280px; width: 100%;" :fit="'contain'" />
+  <q-img class="title-img" src="~assets/logo.png" alt="Chess Logo" :fit="'contain'" />
   <q-list class="c-list">
     <CreateSessionCard :server-url="createSessionServerUrl" />
     <JoinSessionCard :server-url="joinSessionServerUrl" />
   </q-list>
 </template>
+
+<style scoped>
+.title-img {
+  min-height: 120px;
+  height: 30vh;
+  width: 100%;
+}
+</style>
 
 <style>
 .c-card {
