@@ -7,13 +7,13 @@
       </q-card-section>
       <q-card-actions align="center">
         <q-btn color="secondary" @click="onWhiteClick($router)">
-          <q-img :src="whiteKingImg" style="height: 60px; width:60px" />
+          <q-img class="sm-img" :src="whiteKingImg" />
         </q-btn>
         <q-btn color="secondary" @click="onRandomClick($router)">
-          <q-img :src="randomKingImg" style="height: 80px; width:80px" />
+          <q-img class="lg-img" :src="randomKingImg" />
         </q-btn>
         <q-btn color="secondary" @click="onBlackClick($router)">
-          <q-img :src="blackKingImg" style="height: 60px; width:60px" />
+          <q-img class="sm-img" :src="blackKingImg" />
         </q-btn>
       </q-card-actions>
       <q-separator />
@@ -23,6 +23,22 @@
     </q-card>
   </q-dialog>
 </template>
+
+<style lang="scss" scoped>
+.sm-img {
+  width: 15vw;
+  height: 15vw;
+  max-width: 60px;
+  max-height: 60px
+}
+
+.lg-img {
+  width: 20vw;
+  height: 20vw;
+  max-width: 80px;
+  max-height: 80px
+}
+</style>
 
 <script>
 import { defineComponent } from 'vue';
