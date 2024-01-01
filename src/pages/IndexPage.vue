@@ -18,10 +18,11 @@
   margin-top: 4em;
   display: flex;
   flex-direction: row;
+  justify-content: space-evenly;
 }
 
 .c-item {
-  margin: 0 auto;
+  margin: 0;
   padding: 0;
   border-radius: 0.5em;
   width: 100%;
