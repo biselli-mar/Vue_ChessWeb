@@ -1,9 +1,9 @@
 <template>
   <q-item class="c-item" clickable @click="joinSession($router)">
-    <q-card class="c-card">
-      <q-img src="https://picsum.photos/500/300">
+    <q-card class="c-card" bordered>
+      <q-img :src="cardImage">
         <div class="absolute-bottom">
-          <div class="text-h6">Join a Session</div>
+          <div class="text-h6">Join an existing Session</div>
         </div>
       </q-img>
     </q-card>
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
 import { useQuasar, Cookies } from 'quasar';
 
 export default defineComponent({
@@ -24,6 +24,7 @@ export default defineComponent({
   },
   setup(props) {
     const $q = useQuasar();
+    const baseCardPath = 'img/b_king_card';
 
     function getRequestObj(sessionId) {
       return {
@@ -33,7 +34,7 @@ export default defineComponent({
         },
         body: JSON.stringify({
           sessionId: sessionId,
-        }),
+        })
       };
     }
     function handleSessionData(data) {
@@ -48,6 +49,14 @@ export default defineComponent({
         .catch(error => console.error(error));
     }
 
+    const computedDialogColor = computed(() => {
+      if ($q.dark.isActive) {
+        return 'accent';
+      } else {
+        return 'dark';
+      }
+    });
+
     return {
       joinSession(router) {
         $q.dialog({
@@ -57,12 +66,20 @@ export default defineComponent({
             model: '',
             type: 'text',
           },
+          color: computedDialogColor.value,
           cancel: true,
           persistent: true,
         }).onOk(data => {
           postRequest(data, router);
         });
-      }
+      },
+      cardImage: computed(() => {
+        if ($q.dark.isActive) {
+          return baseCardPath + '_dark.png';
+        } else {
+          return baseCardPath + '_light.png';
+        }
+      }),
     }
   },
 });
