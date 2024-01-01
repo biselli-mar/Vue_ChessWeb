@@ -3,7 +3,7 @@
     <q-card class="c-card" bordered>
       <q-img :src="cardImage">
         <div class="absolute-bottom">
-          <div class="text-h6">Join an existing Session</div>
+          <div class="text-h6">Join a Session</div>
         </div>
       </q-img>
     </q-card>

@@ -26,43 +26,12 @@
 <script>
 import { defineComponent, ref } from 'vue'
 import { useQuasar } from 'quasar'
+import { menuList, linksList } from './RouteTabs.js'
 import NavLink from 'components/nav/NavLink.vue'
 import NavMenu from 'components/nav/NavMenu.vue'
 
-const menuList = [
-  {
-    title: 'Play',
-    icon: 'play_arrow',
-    children: [
-      {
-        title: 'New Session',
-        icon: 'add',
-        link: 'session'
-      },
-      {
-        title: 'Join Session',
-        icon: 'group',
-        link: 'join'
-      }
-    ]
-  },
-]
-
-const linksList = [
-  {
-    title: 'About',
-    icon: 'info_outline',
-    link: 'about'
-  },
-  {
-    title: 'Profile',
-    icon: 'person_outline',
-    link: 'profile'
-  },
-]
-
 export default defineComponent({
-  name: 'NavBar',
+  name: 'DesktopNavBar',
 
   components: {
     NavLink, NavMenu

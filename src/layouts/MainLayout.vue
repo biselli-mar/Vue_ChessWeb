@@ -1,23 +1,48 @@
 <template>
   <div class="q-pa-md">
-    <q-layout view="hHh Lpr lFf" class="rounded-borders">
-      <NavBar />
-      <q-page-container>
-        <router-view />
-      </q-page-container>
-    </q-layout>
+    <DesktopLayout v-if="isLarge" />
+    <MobileLayout v-else />
   </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue'
-import NavBar from 'components/nav/NavBar.vue'
+import { defineComponent, computed, ref } from 'vue'
+import { useQuasar } from 'quasar'
+import DesktopLayout from './DesktopLayout.vue'
+import MobileLayout from './MobileLayout.vue'
 
 export default defineComponent({
   name: 'MainLayout',
 
   components: {
-    NavBar
+    DesktopLayout,
+    MobileLayout
   },
+
+  setup() {
+    const $q = useQuasar()
+    const isLargeRef = ref(window.innerWidth > $q.screen.sizes.md)
+    const isLarge = computed({
+      get: () => isLargeRef.value,
+      set: (val) => isLargeRef.value = val
+    })
+    return {
+      isLarge
+    }
+  },
+
+  methods: {
+    onResize() {
+      this.isLarge = window.innerWidth > this.$q.screen.sizes.md
+    }
+  },
+
+  mounted() {
+    window.addEventListener('resize', this.onResize)
+  },
+
+  unmounted() {
+    window.removeEventListener('resize', this.onResize)
+  }
 })
 </script>
