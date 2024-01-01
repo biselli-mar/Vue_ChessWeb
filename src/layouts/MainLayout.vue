@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md">
+  <div>
     <DesktopLayout v-if="isLarge" />
     <MobileLayout v-else />
   </div>
