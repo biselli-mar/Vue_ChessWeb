@@ -216,14 +216,16 @@ export default defineComponent({
     }
   },
   async setup(props) {
-    const getPlayerColorUrl = 'http://localhost:9000/session/player-color?sessionId=' + Cookies.get('CHESS_SESSION_ID') + '&playerId=' + Cookies.get('CHESS_PLAYER_ID');
-    const playerColorPromise = await fetch(getPlayerColorUrl);
+    const getPlayerSateUrl = 'http://localhost:9000/session/player-state?sessionId=' + Cookies.get('CHESS_SESSION_ID') + '&playerId=' + Cookies.get('CHESS_PLAYER_ID');
+    const playerStatePromise = await fetch(getPlayerSateUrl);
     let playerColor = ''
-    if (playerColorPromise.ok) {
-      const responseJson = await playerColorPromise.json();
+    let initialPieces = {};
+    if (playerStatePromise.ok) {
+      const responseJson = await playerStatePromise.json();
       playerColor = responseJson.color;
+      initialPieces = responseJson.pieces;
     } else {
-      console.error("Error getting player color: " + playerColorPromise.status);
+      console.error("Error getting player state: " + playerStatePromise.status);
     }
 
     const chessBoard = ref(null);
@@ -233,9 +235,7 @@ export default defineComponent({
     const checkHighlight = ref(null);
     const pieceRefs = ref([]);
     const audioRefs = ref([]);
-    const initialPieces = {
-      "A1": "wr", "A2": "wp", "A7": "bp", "A8": "br", "B1": "wn", "B2": "wp", "B7": "bp", "B8": "bn", "C1": "wb", "C2": "wp", "C7": "bp", "C8": "bb", "D1": "wq", "D2": "wp", "D7": "bp", "D8": "bq", "E1": "wk", "E2": "wp", "E7": "bp", "E8": "bk", "F1": "wb", "F2": "wp", "F7": "bp", "F8": "bb", "G1": "wn", "G2": "wp", "G7": "bp", "G8": "bn", "H1": "wr", "H2": "wp", "H7": "bp", "H8": "br",
-    }
+
     let chessBoardClass = 'board';
     if (playerColor === 'b') {
       chessBoardClass += ' flipped';

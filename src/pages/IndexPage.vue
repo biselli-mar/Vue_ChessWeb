@@ -8,20 +8,27 @@
 
 <style>
 .c-card {
-  width: 100%;
-  max-width: 400px;
+  padding: 0;
+  margin: 0 0;
+  width: 96%;
 }
 
 .c-list {
+  padding: 0;
   margin-top: 4em;
   display: flex;
   flex-direction: row;
+  justify-content: space-evenly;
 }
 
 .c-item {
-  margin: 0 auto;
+  margin: 0;
+  padding: 0;
+  border-radius: 0.5em;
   width: 100%;
   justify-content: center;
+  align-content: center;
+  max-width: 420px;
 }
 </style>
 

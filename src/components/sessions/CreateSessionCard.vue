@@ -1,7 +1,7 @@
 <template>
   <q-item class="c-item" clickable @click="createSession">
-    <q-card class="c-card">
-      <q-img src="https://picsum.photos/500/300">
+    <q-card class="c-card" bordered>
+      <q-img :src="cardImage">
         <div class="absolute-bottom">
           <div class="text-h6">Start a new Session</div>
         </div>
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
 import { useQuasar } from 'quasar';
 import CreateSessionDialog from './CreateSessionDialog.vue'
 
@@ -25,6 +25,7 @@ export default defineComponent({
   },
   setup(props) {
     const $q = useQuasar();
+    const baseCardPath = 'img/w_king_card';
     return {
       createSession() {
         $q.dialog({
@@ -33,7 +34,14 @@ export default defineComponent({
             serverUrl: props.serverUrl,
           },
         });
-      }
+      },
+      cardImage: computed(() => {
+        if ($q.dark.isActive) {
+          return baseCardPath + '_dark.png';
+        } else {
+          return baseCardPath + '_light.png';
+        }
+      }),
     }
   },
 });

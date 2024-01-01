@@ -7,10 +7,13 @@
       </q-card-section>
       <q-card-actions align="center">
         <q-btn color="secondary" @click="onWhiteClick($router)">
-          <q-img :src="whiteKingImg" style="height: 80px; width:80px" />
+          <q-img :src="whiteKingImg" style="height: 60px; width:60px" />
+        </q-btn>
+        <q-btn color="secondary" @click="onRandomClick($router)">
+          <q-img :src="randomKingImg" style="height: 80px; width:80px" />
         </q-btn>
         <q-btn color="secondary" @click="onBlackClick($router)">
-          <q-img :src="blackKingImg" style="height: 80px; width:80px" />
+          <q-img :src="blackKingImg" style="height: 60px; width:60px" />
         </q-btn>
       </q-card-actions>
       <q-separator />
@@ -84,9 +87,15 @@ export default defineComponent({
         postRequest(false, router);
         onDialogOK({ color: 'b' })
       },
+      onRandomClick(router) {
+        const color = Math.random() < 0.5;
+        postRequest(color, router);
+        onDialogOK({ color: color ? 'w' : 'b' })
+      },
       onCancelClick: onDialogCancel,
       whiteKingImg: 'img/pieces/W_KING.svg',
       blackKingImg: 'img/pieces/B_KING.svg',
+      randomKingImg: 'img/W_B_KING.png',
     }
   }
 });
