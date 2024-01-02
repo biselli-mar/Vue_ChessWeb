@@ -10,16 +10,8 @@ $small-board-size: 100%;
   margin-top: $footer-padding;
   width: 100%;
   height: 100%;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  padding-top: 1rem;
   flex-direction: row;
-
-  @media screen and (max-width: q.$breakpoint-sm) {
-    .board-container {
-      min-height: 88vw;
-      min-width: 88vw;
-    }
-  }
 
   @media screen and (max-height: $min-height-breakpoint) {
     .board-container {
@@ -53,8 +45,23 @@ $small-board-size: 100%;
 
 .board-container {
   display: grid;
-  min-width: $page-size-with-footer;
-  min-height: $page-size-with-footer;
+
+  .portrait & {
+    min-height: 82vw;
+    min-width: 82vw;
+  }
+  @media screen and (min-height: $min-height-breakpoint) and (max-height: $min-height-between-breakpoint) {
+    .landscape & {
+      min-height: 78vh;
+      min-width: 78vh;
+    }
+  }
+  @media screen and (min-height: $min-height-between-breakpoint) {
+    .landscape & {
+      min-height: 82vh;
+      min-width: 82vh;
+    }
+  }
 }
 
 #sessionIdDisplay {

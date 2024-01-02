@@ -2,7 +2,7 @@
   <div id="sessionIdDisplay">
     <q-chip text-color="white" color="secondary" icon="info" label="Loading game..." ref="sessionIdChip" />
   </div>
-  <div class="game-container" id="game">
+  <div :class="'game-container' + orientation" id="game" ref="gameContainer">
     <div class="chess-layout">
       <div class="board-container shadow-12">
         <Suspense>
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { ref, defineComponent } from 'vue'
+import { ref, computed, defineComponent } from 'vue'
 import { Cookies } from 'quasar'
 import ChessBoard from 'src/components/game/ChessBoard.vue'
 
@@ -27,8 +27,18 @@ export default defineComponent({
     onGameStarted() {
       this.$refs.sessionIdChip.$el.classList.add('visually-hidden');
     },
+    onResize() {
+      this.gameContainer.classList.remove('landscape');
+      this.gameContainer.classList.remove('portrait');
+      if (window.innerWidth > window.innerHeight) {
+        this.gameContainer.classList.add('landscape');
+      } else {
+        this.gameContainer.classList.add('portrait');
+      }
+    }
   },
   setup() {
+    const gameContainer = ref(null);
     const sessionIdChip = ref(null);
 
     const socketUrl = "ws://localhost:9000/play/socket?sessionId=" + Cookies.get('CHESS_SESSION_ID');
@@ -48,6 +58,8 @@ export default defineComponent({
     }
     return {
       sessionIdChip,
+      gameContainer,
+      orientation: window.innerWidth > window.innerHeight ? ' landscape' : ' portrait',
       boardProps: {
         socket,
         id: 'chessboard',
@@ -56,7 +68,12 @@ export default defineComponent({
   },
   mounted() {
     this.$refs.sessionIdChip.$el.innerText = 'Session-Id: ' + Cookies.get('CHESS_SESSION_ID');
+    window.addEventListener('resize', this.onResize)
   },
+
+  unmounted() {
+    window.removeEventListener('resize', this.onResize)
+  }
 })
 </script>
 
