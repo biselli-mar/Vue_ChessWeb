@@ -6,9 +6,14 @@
   </q-list>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+$img-margin: 16px;
+
 .title-img {
-  min-height: 120px;
+  max-width: calc(100vw - ($img-margin * 2));
+  margin-left: $img-margin;
+  margin-right: $img-margin;
+  min-height: 100px;
   height: 30vh;
   width: 100%;
 }
@@ -34,9 +39,13 @@
   padding: 0;
   border-radius: 0.5em;
   width: 100%;
+  max-width: 420px;
   justify-content: center;
   align-content: center;
-  max-width: 420px;
+}
+
+.q-img {
+  max-height: 40vh;
 }
 </style>
 
