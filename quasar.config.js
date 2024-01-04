@@ -12,6 +12,8 @@
 const { configure } = require('quasar/wrappers');
 require('dotenv').config()
 
+const socketUrl = process.env.DEV ? 'ws://localhost:9000' : process.env.SOCKET_URL
+const backendUrl = process.env.DEV ? 'http://localhost:9000' : process.env.BACKEND_URL
 
 module.exports = configure(function (/* ctx */) {
   return {
@@ -71,8 +73,8 @@ module.exports = configure(function (/* ctx */) {
       publicPath: process.env.NODE_ENV === "production" ? "/Vue_ChessWeb/" : "/",
       // analyze: true,
       env: {
-        SOCKET_URL: process.env.DEV ? 'ws://localhost:9000/' : process.env.SOCKET_URL,
-        BACKEND_URL: process.env.DEV ? 'http://localhost:9000/' : process.env.BACKEND_URL,
+        SOCKET_URL: socketUrl,
+        BACKEND_URL: backendUrl,
       },
       // rawDefine: {}
       // ignorePublicFolder: true,
@@ -100,7 +102,19 @@ module.exports = configure(function (/* ctx */) {
       // https: true
       open: true, // opens browser window automatically
       port: 9001,
-      proxy: 'http://localhost:9000'
+      proxy: {
+        '/api': {
+          target: backendUrl,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ''),
+        },
+        '/socket.io': {
+          target: socketUrl,
+          changeOrigin: true,
+          ws: true,
+          rewrite: (path) => path.replace(/^\/socket.io/, '/play/socket'),
+        }
+      }
     },
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#framework
