@@ -68,11 +68,11 @@ module.exports = configure(function (/* ctx */) {
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
-      publicPath: process.env.NODE_ENV === "production" ? "/REPO_NAME/" : "/",
+      publicPath: process.env.NODE_ENV === "production" ? "/Vue_ChessWeb/" : "/",
       // analyze: true,
       env: {
-        SOCKET_URL: process.env.DEV ? 'ws://localhost:9000/' : process.env.BACKEND_URL,
-        BACKEND_URL: process.env.DEV ? 'http://localhost:9000/' : process.env.SOCKET_URL,
+        SOCKET_URL: process.env.DEV ? 'ws://localhost:9000/' : process.env.SOCKET_URL,
+        BACKEND_URL: process.env.DEV ? 'http://localhost:9000/' : process.env.BACKEND_URL,
       },
       // rawDefine: {}
       // ignorePublicFolder: true,
