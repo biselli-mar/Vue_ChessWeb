@@ -68,7 +68,7 @@ module.exports = configure(function (/* ctx */) {
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
-      // publicPath: '/',
+      publicPath: process.env.NODE_ENV === "production" ? "/REPO_NAME/" : "/",
       // analyze: true,
       env: {
         SOCKET_URL: process.env.DEV ? 'ws://localhost:9000/' : process.env.BACKEND_URL,
