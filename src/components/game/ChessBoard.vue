@@ -216,7 +216,7 @@ export default defineComponent({
     }
   },
   async setup(props) {
-    const getPlayerSateUrl = 'http://localhost:9000/session/player-state?sessionId=' + Cookies.get('CHESS_SESSION_ID') + '&playerId=' + Cookies.get('CHESS_PLAYER_ID');
+    const getPlayerSateUrl = process.env.BACKEND_URL + 'session/player-state?sessionId=' + Cookies.get('CHESS_SESSION_ID') + '&playerId=' + Cookies.get('CHESS_PLAYER_ID');
     const playerStatePromise = await fetch(getPlayerSateUrl);
     let playerColor = ''
     let initialPieces = {};

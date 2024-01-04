@@ -61,8 +61,8 @@ export default defineComponent({
     JoinSessionCard,
   },
   setup() {
-    const createSessionServerUrl = 'http://localhost:9000/session';
-    const joinSessionServerUrl = 'http://localhost:9000/session/join';
+    const createSessionServerUrl = process.env.BACKEND_URL + 'session';
+    const joinSessionServerUrl = process.env.BACKEND_URL + 'session/join';
     return {
       createSessionServerUrl,
       joinSessionServerUrl,

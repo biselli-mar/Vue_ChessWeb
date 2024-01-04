@@ -41,7 +41,7 @@ export default defineComponent({
     const gameContainer = ref(null);
     const sessionIdChip = ref(null);
 
-    const socketUrl = "ws://localhost:9000/play/socket?sessionId=" + Cookies.get('CHESS_SESSION_ID');
+    const socketUrl = process.env.SOCKET_URL + "?sessionId=" + Cookies.get('CHESS_SESSION_ID');
     function socket() {
       let _socket = new WebSocket(socketUrl);
       _socket.onopen = function () {
