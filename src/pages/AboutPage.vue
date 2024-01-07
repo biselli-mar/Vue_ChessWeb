@@ -1,7 +1,8 @@
 <template>
   <div>
+    <SideBar @scroll-to-subsection="scrollToSubsection" />
     <MainSection title="Chess">
-      <SubSection title="Background">
+      <SubSection id=background title="Background">
         <span class="block-text">
           <p class="lead"><strong>Chess</strong> is a classic <em>two-player strategy board game</em> that has been played
             for
@@ -16,7 +17,7 @@
           the world.
         </p>
       </SubSection>
-      <SubSection title="Rules">
+      <SubSection id=rules title="Rules">
         <span class="block-text">
           <p class="lead">The objective of the game is to <strong>checkmate</strong> your opponent's king.</p>
           <p>This means putting their king in a position where it is <strong>under attack</strong> (in
@@ -29,25 +30,24 @@
           protecting their own.
         </p>
       </SubSection>
-      <SubSection title="Pieces">
+      <SubSection id=pieces title="Pieces">
         <PiecesAccordion></PiecesAccordion>
       </SubSection>
-      <SubSection title="Board">
+      <SubSection id=board title="Board">
         <div class="chessboard">
-        <img src="img/board_green.png" alt="Chess Board" />
+          <p class="card-text">
+            The chessboard is an <strong>8x8 grid</strong> of alternating light and dark squares.
+            The <strong>bottom-left square</strong> is always dark.
+            Rows are called <strong>ranks</strong> and are numbered from 1 to 8.
+            Columns are called <strong>files</strong> and are labeled from "a" to "h".
+          </p>
+          <img src="img/board_green.png" alt="Chess Board" class="boardimage" />
         </div>
-        <p class="card-text">
-                  The chessboard is an <strong>8x8 grid</strong> of alternating light and dark squares.
-                  The <strong>bottom-left square</strong> is always dark.
-                  Rows are called <strong>ranks</strong> and are numbered from 1 to 8.
-                  Columns are called <strong>files</strong> and are labeled from "a" to "h".
-                </p>
-              
       </SubSection>
     </MainSection>
 
     <MainSection title="Contact">
-      <SubSection title="Authors">
+      <SubSection id=authors title="Authors">
         <p class="lead">
           This project was created by
           <a href="https://github.com/biselli-mar">Marcel Biselli</a> and
@@ -56,7 +56,7 @@
         </p>
       </SubSection>
 
-      <SubSection title="GitHub">
+      <SubSection id=github title="GitHub">
         <p class="lead">
           Be sure to check out the project on
           <a href="https://github.com/biselli-mar/ChessWeb">
@@ -73,11 +73,11 @@
     </MainSection>
 
     <MainSection title="Legal">
-      <SubSection title="Copyright">
+      <SubSection id=copyright title="Copyright">
         <span>Piece Sprites provided by:
-            <a href="https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces/Standard">Cburnett,</a>
-            <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0,</a>
-            via Wikimedia Commons
+          <a href="https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces/Standard">Cburnett,</a>
+          <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0,</a>
+          via Wikimedia Commons
         </span>
       </SubSection>
     </MainSection>
@@ -88,20 +88,38 @@
 import MainSection from 'src/components/about/MainSection.vue';
 import SubSection from 'src/components/about/SubSection.vue';
 import PiecesAccordion from 'src/components/about/PiecesAccordion.vue';
+import SideBar from 'src/components/about/SideBar.vue';
 
 export default {
   components: {
     MainSection,
     SubSection,
     PiecesAccordion,
+    SideBar,
+  },
+  methods: {
+    scrollToSubsection(subsectionId) {
+      const element = document.getElementById(subsectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    },
   },
 };
+
 </script>
 
 <style scoped>
+
+.boardimage {
+  width: 70%;
+  height: 70%;
+}
 .chessboard {
-  height: 80%;
-  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
 }
 </style>
 
