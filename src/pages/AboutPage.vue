@@ -33,7 +33,16 @@
         <PiecesAccordion></PiecesAccordion>
       </SubSection>
       <SubSection title="Board">
+        <div class="chessboard">
         <img src="img/board_green.png" alt="Chess Board" />
+        </div>
+        <p class="card-text">
+                  The chessboard is an <strong>8x8 grid</strong> of alternating light and dark squares.
+                  The <strong>bottom-left square</strong> is always dark.
+                  Rows are called <strong>ranks</strong> and are numbered from 1 to 8.
+                  Columns are called <strong>files</strong> and are labeled from "a" to "h".
+                </p>
+              
       </SubSection>
     </MainSection>
 
@@ -88,3 +97,11 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.chessboard {
+  height: 80%;
+  width: 80%;
+}
+</style>
+
