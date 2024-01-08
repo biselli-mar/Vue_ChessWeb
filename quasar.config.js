@@ -14,6 +14,7 @@ require('dotenv').config()
 
 const socketUrl = process.env.DEV ? 'ws://localhost:9000' : process.env.SOCKET_URL
 const backendUrl = process.env.DEV ? 'http://localhost:9000' : process.env.BACKEND_URL
+const repoName = process.env.DEV ? '' : process.env.REPO_NAME
 
 module.exports = configure(function (/* ctx */) {
   return {
@@ -70,11 +71,12 @@ module.exports = configure(function (/* ctx */) {
 
       // rebuildCache: true, // rebuilds Vite/linter/etc cache on startup
 
-      publicPath: process.env.NODE_ENV === "production" ? "/Vue_ChessWeb/" : "/",
+      publicPath: process.env.NODE_ENV === "production" ? (repoName + "/") : "/",
       // analyze: true,
       env: {
         SOCKET_URL: socketUrl,
         BACKEND_URL: backendUrl,
+        REPO_NAME: repoName
       },
       // rawDefine: {}
       // ignorePublicFolder: true,

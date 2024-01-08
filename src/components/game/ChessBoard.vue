@@ -30,9 +30,9 @@ import ChessCoordinates from './ChessCoordinates.vue';
 import ChessPiece from './ChessPiece.vue';
 
 const audioFiles = [
-  { id: 'move-sound', src: '/sounds/move.mp3' },
-  { id: 'capture-sound', src: '/sounds/capture.mp3' },
-  { id: 'check-sound', src: '/sounds/check.mp3' },
+  { id: 'move-sound', src: process.env.REPO_NAME + '/sounds/move.mp3' },
+  { id: 'capture-sound', src: process.env.REPO_NAME + '/sounds/capture.mp3' },
+  { id: 'check-sound', src: process.env.REPO_NAME + '/sounds/check.mp3' },
 ];
 
 export default defineComponent({
@@ -216,8 +216,10 @@ export default defineComponent({
     }
   },
   async setup(props) {
-    const getPlayerSateUrl = 'http://localhost:9001/api/session/player-state?sessionId=' + Cookies.get('CHESS_SESSION_ID') + '&playerId=' + Cookies.get('CHESS_PLAYER_ID');
+    console.log("ChessBoard setup")
+    const getPlayerSateUrl = process.env.BACKEND_URL + '/session/player-state?sessionId=' + Cookies.get('CHESS_SESSION_ID') + '&playerId=' + Cookies.get('CHESS_PLAYER_ID');
     const playerStatePromise = await fetch(getPlayerSateUrl);
+    console.log("Fetched state")
     let playerColor = ''
     let initialPieces = {};
     if (playerStatePromise.ok) {
@@ -266,6 +268,7 @@ export default defineComponent({
     //this.moveSound = $('#move-sound')[0];
     //this.captureSound = $('#capture-sound')[0];
     //this.checkSound = $('#check-sound')[0];
+    console.log("ChessBoard mounted")
 
     for (let piece of this.pieceRefs) {
       this.pieceRefMap[piece.tile] = piece;
@@ -277,6 +280,7 @@ export default defineComponent({
     }
 
     let _this = this;
+    console.log("Setting socket onmessage")
     this.varSocket.onmessage = function (event) {
       if (event.data === 'Wait for opponent') {
         console.log("Waiting for opponent; start keep alive");
