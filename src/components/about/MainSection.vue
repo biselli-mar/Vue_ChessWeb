@@ -1,7 +1,7 @@
 <template>
-  <div :id="sectionId" class="main-section">
+  <div class="main-section">
     <div class="section-title-container flex">
-      <h2 class="section-title">{{ title }}</h2>
+      <h3 class="section-title text-bold">{{ title }}</h3>
       <div class="spacer"></div>
     </div>
     <slot></slot>

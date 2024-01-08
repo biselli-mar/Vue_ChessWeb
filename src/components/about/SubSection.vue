@@ -1,6 +1,6 @@
 
 <template>
-  <div :id="subsectionId" class="subsection-container">
+  <div class="subsection-container">
     <div class="left-side">
       <h4 class="subsection-title">{{ title }}</h4>
     </div>

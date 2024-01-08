@@ -1,8 +1,8 @@
 <template>
   <q-layout view="hHh LpR lfr">
     <NavBar />
-    <SideBar />
-    <q-page-container>
+    <SideBar @scroll-to-subsection="scrollToSubsection" />
+    <q-page-container class="about-page">
       <router-view />
     </q-page-container>
   </q-layout>
@@ -20,5 +20,19 @@ export default defineComponent({
     NavBar,
     SideBar,
   },
+  methods: {
+    scrollToSubsection(subsectionId) {
+      const element = document.getElementById(subsectionId);
+      if (element) {
+        element.scrollIntoView({ block: 'start', inline: 'nearest', behavior: 'smooth' });
+      }
+    },
+  }
 })
 </script>
+
+<style scoped>
+.about-page {
+  top: 50px;
+}
+</style>
