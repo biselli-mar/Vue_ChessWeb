@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <SideBar @scroll-to-subsection="scrollToSubsection" />
+  <q-layout view="hHh lpR fFf">
+    <SideBar @scroll-to-subsection="scrollToSubsection" class="sidebar"/>
     <MainSection title="Chess">
       <SubSection id=background title="Background">
         <span class="block-text">
@@ -81,7 +81,7 @@
         </span>
       </SubSection>
     </MainSection>
-  </div>
+  </q-layout>
 </template>
 
 <script>
@@ -110,7 +110,6 @@ export default {
 </script>
 
 <style scoped>
-
 .boardimage {
   width: 70%;
   height: 70%;

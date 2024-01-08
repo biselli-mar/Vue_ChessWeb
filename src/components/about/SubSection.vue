@@ -25,7 +25,6 @@
   .subsection-container {
     display: flex;
     justify-content: space-between;
-    align-items:baseline;
     margin-bottom: 20px; 
     border-bottom: 1px solid #ccc; 
     padding-bottom: 10px; 
@@ -33,13 +32,14 @@
   }
   
   .left-side {
-    flex: 1;
+    flex: 2;
     margin-right: 20px;
   }
   
   
   .right-side {
     flex: 3;
+    font-size: 1.25em;
   }
 
   
