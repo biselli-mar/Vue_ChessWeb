@@ -94,14 +94,6 @@ export default {
     SubSection,
     PiecesAccordion,
   },
-  methods: {
-    scrollToSubsection(subsectionId) {
-      const element = document.getElementById(subsectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    },
-  },
 };
 
 </script>
@@ -115,6 +107,11 @@ export default {
 .about-container {
   padding-left: 3rem;
   padding-right: 3rem;
+}
+
+.block-text {
+  text-align: justify;
+  text-justify: inter-word;
 }
 
 .chessboard {
