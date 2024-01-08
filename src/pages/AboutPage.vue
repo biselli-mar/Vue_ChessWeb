@@ -1,7 +1,7 @@
 <template>
   <div class="about-container">
     <MainSection title="Chess">
-      <SubSection id=background title="Background">
+      <SubSection subsection-id=background title="Background">
         <span class="block-text">
           <p class="lead"><strong>Chess</strong> is a classic <em>two-player strategy board game</em> that has been played
             for
@@ -16,7 +16,7 @@
           the world.
         </p>
       </SubSection>
-      <SubSection id=rules title="Rules">
+      <SubSection subsection-id=rules title="Rules">
         <span class="block-text">
           <p class="lead">The objective of the game is to <strong>checkmate</strong> your opponent's king.</p>
           <p>This means putting their king in a position where it is <strong>under attack</strong> (in
@@ -29,10 +29,10 @@
           protecting their own.
         </p>
       </SubSection>
-      <SubSection id=pieces title="Pieces">
+      <SubSection subsection-id=pieces title="Pieces">
         <PiecesAccordion></PiecesAccordion>
       </SubSection>
-      <SubSection id=board title="Board">
+      <SubSection subsection-id=board title="Board">
         <div class="chessboard">
           <p class="card-text">
             The chessboard is an <strong>8x8 grid</strong> of alternating light and dark squares.
@@ -46,7 +46,7 @@
     </MainSection>
 
     <MainSection title="Contact">
-      <SubSection id=authors title="Authors">
+      <SubSection subsection-id=authors title="Authors">
         <p class="lead">
           This project was created by
           <a href="https://github.com/biselli-mar">Marcel Biselli</a> and
@@ -55,7 +55,7 @@
         </p>
       </SubSection>
 
-      <SubSection id=github title="GitHub">
+      <SubSection subsection-id=github title="GitHub">
         <p class="lead">
           Be sure to check out the project on
           <a href="https://github.com/biselli-mar/ChessWeb">
@@ -72,7 +72,7 @@
     </MainSection>
 
     <MainSection title="Legal">
-      <SubSection id=copyright title="Copyright">
+      <SubSection subsection-id=copyright title="Copyright">
         <span>Piece Sprites provided by:
           <a href="https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces/Standard">Cburnett,</a>
           <a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0,</a>

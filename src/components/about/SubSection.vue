@@ -4,6 +4,7 @@
     <div class="left-side">
       <h4 class="subsection-title">{{ title }}</h4>
     </div>
+    <div class="scroll-target" :id="subsectionId"></div>
     <div class="right-side">
       <slot></slot>
     </div>
@@ -14,6 +15,10 @@
 export default {
   props: {
     title: {
+      type: String,
+      required: true,
+    },
+    subsectionId: {
       type: String,
       required: true,
     },
@@ -29,6 +34,11 @@ export default {
   border-bottom: 1px solid #ccc;
   padding-bottom: 10px;
   width: 80%;
+}
+
+.scroll-target {
+  position: relative;
+  top: -160px;
 }
 
 .left-side {
