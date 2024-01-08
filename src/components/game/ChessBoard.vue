@@ -206,13 +206,14 @@ export default defineComponent({
       }
       */
       if (gameData["game-state"] === 'CHECKMATE') {
-  const turnColor = gameData["state"]["color"];
-  const whiteWon = turnColor === 'b';
-  const outcome = whiteWon ? 'win' : 'lose';
-  this.showOutcomeModal(outcome);
-} else if (gameData["game-state"] === 'DRAW') {
-  this.showOutcomeModal('draw');
-}
+        if (gameData["state"]["color"] === this.playerColor) {
+          this.showOutcomeModal('lose');
+        } else {
+          this.showOutcomeModal('win');
+        }
+      } else if (gameData["game-state"] === 'DRAW') {
+        this.showOutcomeModal('draw');
+      }
 
       this.position = gameData;
       this.animateState = false;
