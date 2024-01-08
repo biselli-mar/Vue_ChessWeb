@@ -1,33 +1,44 @@
 <!-- Sidebar.vue -->
 <template>
-  <q-drawer v-model="drawerModel" side="right">
+  <q-drawer v-model="drawerModel" side="right" bordered>
     <q-list>
-      <q-item
-        v-for="subsection in subsections"
-        :key="subsection.id"
-        clickable
-        @click="scrollToSubsection(subsection.id)"
-      >
-        <q-item-label>{{ subsection.title }}</q-item-label>
-      </q-item>
+      <AccordionItem v-for="section in sections" :key="section.id" :title="section.title" expanded>
+        <q-list>
+          <q-item v-for="subsection in section.children" :key="subsection.id" clickable
+            @click="scrollToSubsection(subsection.id)">
+            <q-item-section>{{ subsection.title }}</q-item-section>
+          </q-item>
+        </q-list>
+      </AccordionItem>
     </q-list>
   </q-drawer>
 </template>
 
 <script>
+import AccordionItem from './AccordionItem.vue';
+
 export default {
   data() {
     return {
       drawerModel: true,
-      subsections: [
-        { id: 'background', title: 'Background' },
-        { id: 'rules', title: 'Rules' },
-        { id: 'pieces', title: 'Pieces'},
-        { id: 'board', title: 'Board'},
-        { id: 'authors', title: 'Authors'},
-        { id: 'github', title: 'Github'},
-        { id: 'copyright', title: 'CopyRight'},
-
+      sections: [
+        {
+          id: 'chess', title: 'Chess', children: [
+            { id: 'background', title: 'Background' },
+            { id: 'rules', title: 'Rules' },
+            { id: 'pieces', title: 'Pieces' },
+            { id: 'board', title: 'Board' },
+          ]
+        }, {
+          id: 'contact', title: 'Contact', children: [
+            { id: 'authors', title: 'Authors' },
+            { id: 'github', title: 'Github' },
+          ]
+        }, {
+          id: 'legal', title: 'Legal', children: [
+            { id: 'copyright', title: 'CopyRight' },
+          ]
+        },
       ],
     };
   },
@@ -36,12 +47,13 @@ export default {
       this.$emit('scroll-to-subsection', subsectionId);
     },
   },
+  components: { AccordionItem }
 };
 </script>
 
 <style scoped>
 .static-sidebar {
-  position: fixed;
+  position: sticky;
   top: 0;
   bottom: 0;
 }
