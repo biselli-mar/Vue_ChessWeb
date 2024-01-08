@@ -1,6 +1,6 @@
 <!-- Sidebar.vue -->
 <template>
-  <q-drawer v-model="drawerModel" side="right" bordered>
+  <q-drawer v-model="drawerModel" side="right" behavior="desktop" bordered>
     <q-list>
       <AccordionItem v-for="section in sections" :key="section.id" :title="section.title" expanded>
         <q-list>
