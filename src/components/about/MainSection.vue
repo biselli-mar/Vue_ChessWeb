@@ -22,7 +22,6 @@ export default {
 <style lang="scss" scoped>
 .main-section {
   margin-bottom: 20px;
-  width: 80%;
 }
 
 .spacer {

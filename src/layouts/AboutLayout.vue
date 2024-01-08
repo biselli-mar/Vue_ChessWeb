@@ -2,7 +2,7 @@
   <q-layout view="hHh LpR lfr">
     <NavBar />
     <SideBar @scroll-to-subsection="scrollToSubsection" />
-    <q-page-container class="about-page">
+    <q-page-container>
       <router-view />
     </q-page-container>
   </q-layout>
@@ -30,9 +30,3 @@ export default defineComponent({
   }
 })
 </script>
-
-<style scoped>
-.about-page {
-  top: 50px;
-}
-</style>

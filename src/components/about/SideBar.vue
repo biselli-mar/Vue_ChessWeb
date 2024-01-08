@@ -1,7 +1,13 @@
 <!-- Sidebar.vue -->
 <template>
-  <q-drawer v-model="drawerModel" side="right" behavior="desktop" bordered>
+  <q-drawer v-model="drawerModel" side="right" bordered>
     <q-list>
+      <q-item>
+        <q-item-section class="text-black">
+          On this page
+        </q-item-section>
+      </q-item>
+      <q-separator />
       <AccordionItem v-for="section in sections" :key="section.id" :title="section.title" expanded>
         <q-list>
           <q-item class="text-info" v-for="subsection in section.children" :key="subsection.id" clickable
@@ -50,3 +56,11 @@ export default {
   components: { AccordionItem }
 };
 </script>
+
+<style lang="scss" scoped>
+.text-black {
+  .body--dark & {
+    color: white !important;
+  }
+}
+</style>
