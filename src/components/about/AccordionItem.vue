@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-expansion-item v-if="!popupMode" :label="title" v-model="isOpen" header-class="text-info">
+    <q-expansion-item v-if="!popupMode" :label="title" v-model="isOpen" header-class="text-info" group="somegroup">
       <q-card>
         <q-card-section class="flex">
           <img v-if="image" :src="image" alt="Thumbnail" class="thumbnail" />
@@ -10,6 +10,7 @@
         </q-card-section>
       </q-card>
     </q-expansion-item>
+    <q-separator />
 
     <q-dialog v-if="popupMode" v-model="dialogVisible">
       <q-card>
