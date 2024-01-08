@@ -4,9 +4,9 @@
     <q-list>
       <AccordionItem v-for="section in sections" :key="section.id" :title="section.title" expanded>
         <q-list>
-          <q-item v-for="subsection in section.children" :key="subsection.id" clickable
+          <q-item class="text-info" v-for="subsection in section.children" :key="subsection.id" clickable
             @click="scrollToSubsection(subsection.id)">
-            <q-item-section>{{ subsection.title }}</q-item-section>
+            {{ subsection.title }}
           </q-item>
         </q-list>
       </AccordionItem>
@@ -50,11 +50,3 @@ export default {
   components: { AccordionItem }
 };
 </script>
-
-<style scoped>
-.static-sidebar {
-  position: sticky;
-  top: 0;
-  bottom: 0;
-}
-</style>

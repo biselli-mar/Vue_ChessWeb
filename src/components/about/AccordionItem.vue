@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-expansion-item v-if="!popupMode" :label="title" v-model="isOpen">
+    <q-expansion-item v-if="!popupMode" :label="title" v-model="isOpen" header-class="text-info">
       <q-card>
         <q-card-section class="flex">
           <img v-if="image" :src="image" alt="Thumbnail" class="thumbnail" />
@@ -58,7 +58,11 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.accordion-item-label {
+  color: black !important;
+}
+
 .thumbnail {
   max-width: 100%;
   margin-right: 10px;

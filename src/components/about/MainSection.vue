@@ -33,7 +33,8 @@ export default {
   z-index: 10;
   position: sticky;
   top: 50px;
-  width: 80%
+  width: 80%;
+  pointer-events: none;
 }
 
 .section-title {
