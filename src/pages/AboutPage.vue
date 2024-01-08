@@ -1,6 +1,5 @@
 <template>
-  <q-layout view="hHh lpR fFf">
-    <SideBar @scroll-to-subsection="scrollToSubsection" class="sidebar"/>
+  <div class="about-container">
     <MainSection title="Chess">
       <SubSection id=background title="Background">
         <span class="block-text">
@@ -81,21 +80,19 @@
         </span>
       </SubSection>
     </MainSection>
-  </q-layout>
+  </div>
 </template>
 
 <script>
 import MainSection from 'src/components/about/MainSection.vue';
 import SubSection from 'src/components/about/SubSection.vue';
 import PiecesAccordion from 'src/components/about/PiecesAccordion.vue';
-import SideBar from 'src/components/about/SideBar.vue';
 
 export default {
   components: {
     MainSection,
     SubSection,
     PiecesAccordion,
-    SideBar,
   },
   methods: {
     scrollToSubsection(subsectionId) {
@@ -114,6 +111,12 @@ export default {
   width: 70%;
   height: 70%;
 }
+
+.about-container {
+  padding-left: 3rem;
+  padding-right: 3rem;
+}
+
 .chessboard {
   display: flex;
   flex-direction: column;
