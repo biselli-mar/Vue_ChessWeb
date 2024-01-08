@@ -1,32 +1,57 @@
 <template>
-    <div :id="sectionId" class="main-section">
-      <h2>{{ title }}</h2>
-      <div class="subsection-container">
-        <slot></slot>
-      </div>
+  <div :id="sectionId" class="main-section">
+    <div class="section-title-container flex">
+      <h2 class="section-title">{{ title }}</h2>
+      <div class="spacer"></div>
     </div>
-  </template>
+    <slot></slot>
+  </div>
+</template>
 
 <script>
 ;
 export default {
-    props: {
-        title: {
-            type: String,
-            required: true,
-        },
+  props: {
+    title: {
+      type: String,
+      required: true,
     },
+  },
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .main-section {
-  margin-bottom: 20px; /* Adjust margin as needed */
+  margin-bottom: 20px;
+  width: 80%;
+}
+
+.spacer {
+  flex: 3;
+}
+
+.section-title-container {
+  z-index: 10;
+  position: sticky;
+  top: 50px;
+  width: 80%
 }
 
 .section-title {
-  color: #333; /* Set the color of the section title */
-  font-size: 1.5em; /* Adjust the font size of the section title */
-  margin-bottom: 10px; /* Adjust the margin bottom of the section title */
+  padding-top: .75em;
+  margin: 0;
+  margin-bottom: .5em;
+  flex: 2;
+  background-color: #fff;
+
+  .body--dark & {
+    background-color: var(--q-dark-page);
+  }
 }
 
+:global(.subsection-title) {
+  position: sticky;
+  top: 160px;
+  margin: 0;
+  z-index: 9;
+}
 </style>

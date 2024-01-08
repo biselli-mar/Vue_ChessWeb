@@ -1,47 +1,44 @@
 
 <template>
-    <div :id="subsectionId" class="subsection-container">
-      <div class="left-side">
-        <h4 class="title">{{ title }}</h4>
-      </div>
-      <div class="right-side">
-        <slot></slot>
-      </div>
+  <div :id="subsectionId" class="subsection-container">
+    <div class="left-side">
+      <h4 class="subsection-title">{{ title }}</h4>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    props: {
-      title: {
-        type: String,
-        required: true,
-      },
-    },
-  };
-  </script>
-  
-  <style scoped>
-  .subsection-container {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px; 
-    border-bottom: 1px solid #ccc; 
-    padding-bottom: 10px; 
-    width: 80%;
-  }
-  
-  .left-side {
-    flex: 2;
-    margin-right: 20px;
-  }
-  
-  
-  .right-side {
-    flex: 3;
-    font-size: 1.25em;
-  }
+    <div class="right-side">
+      <slot></slot>
+    </div>
+  </div>
+</template>
 
-  
-  </style>
-  
+<script>
+export default {
+  props: {
+    title: {
+      type: String,
+      required: true,
+    },
+  },
+};
+</script>
+
+<style scoped>
+.subsection-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  width: 80%;
+}
+
+.left-side {
+  flex: 2;
+  margin-right: 20px;
+}
+
+
+.right-side {
+  flex: 3;
+  font-size: 1.25em;
+}
+</style>
