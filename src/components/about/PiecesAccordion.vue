@@ -1,14 +1,9 @@
 <template>
   <div class="pieceaccordion">
-      <AccordionItem
-          v-for="(piece, index) in pieces"
-          :key="index"
-          :title="piece.label"
-          :popupMode="false" 
-          :image="piece.image"
-      >
-          {{ piece.description }}
-      </AccordionItem>
+    <AccordionItem v-for="(piece, index) in pieces" :key="index" :title="piece.label" :popupMode="false"
+      :image="piece.image" accordionGroup="pieces">
+      {{ piece.description }}
+    </AccordionItem>
   </div>
 </template>
 
@@ -31,7 +26,7 @@ export default {
         {
           label: "Rook",
           description: "Rooks move horizontally or vertically any number of squares.",
-          image: "img/pieces/B_ROOK_L.svg", 
+          image: "img/pieces/B_ROOK_L.svg",
         },
         {
           label: "Knight",
