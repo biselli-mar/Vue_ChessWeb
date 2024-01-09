@@ -10,11 +10,16 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', name: "index", component: IndexPage },
-      { path: "/about", name: "about", component: () => import('pages/AboutPage.vue') },
       { path: "/play", name: "play", component: PlayPage },
       { path: "/profile", name: "profile", component: ProfilePage },
       { path: "/session", name: "session", component: CreateSessionPage },
       { path: "/session/join", name: "join", component: JoinSessionPage },
+    ]
+  },
+  {
+    path: '/about', component: () => import('layouts/AboutLayout.vue'),
+    children: [
+      { path: '', name: "about", component: () => import('pages/AboutPage.vue') },
     ]
   },
   { path: '/:catchAll(.*)*', component: () => import('pages/ErrorNotFound.vue') }
