@@ -112,6 +112,7 @@ export default {
 .block-text {
   text-align: justify;
   text-justify: inter-word;
+  font-size: larger;
 }
 
 .chessboard {

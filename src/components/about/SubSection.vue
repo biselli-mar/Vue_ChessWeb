@@ -33,7 +33,7 @@ export default {
   margin-bottom: 20px;
   border-bottom: 1px solid #ccc;
   padding-bottom: 10px;
-  width: 80%;
+  width: 90%;
 }
 
 .scroll-target {
@@ -48,7 +48,7 @@ export default {
 
 
 .right-side {
-  flex: 3;
+  flex: 4;
   font-size: 1.25em;
 }
 </style>

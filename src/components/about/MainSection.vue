@@ -25,14 +25,14 @@ export default {
 }
 
 .spacer {
-  flex: 3;
+  flex: 4;
 }
 
 .section-title-container {
   z-index: 10;
   position: sticky;
   top: 50px;
-  width: 80%;
+  width: 90%;
   pointer-events: none;
 }
 
