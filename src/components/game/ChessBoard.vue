@@ -13,6 +13,7 @@
     <ChessPiece v-for="(piece, tile) in initialPieces" :key="tile" :piece="piece" :tile="tile" :player-color="playerColor"
       @piece-mouse-down="onPieceMouseDown" ref="pieceRefs" />
     <!--Hints-->
+    <ChessModal ref="chessModal" />
   </chessboard>
 </template>
 
@@ -28,6 +29,7 @@ import { getPositionDiff } from 'assets/scripts/game/position.js';
 import HighlightSquare from './HighlightSquare.vue';
 import ChessCoordinates from './ChessCoordinates.vue';
 import ChessPiece from './ChessPiece.vue';
+import ChessModal from './ChessModal.vue';
 
 const audioFiles = [
   { id: 'move-sound', src: '/sounds/move.mp3' },
@@ -70,6 +72,7 @@ export default defineComponent({
     HighlightSquare,
     ChessCoordinates,
     ChessPiece,
+    ChessModal,
   },
   methods: {
     onPieceMouseDown(eventData) {
@@ -122,6 +125,9 @@ export default defineComponent({
       };
 
       this.varSocket.send(JSON.stringify(move));
+    },
+    showOutcomeModal(outcome) {
+      this.$refs.chessModal.openModal(outcome);
     },
     processMove(gameData) {
       const from = gameData["move"]["from"];
@@ -199,6 +205,15 @@ export default defineComponent({
         this.gameOverModal.modal('toggle');
       }
       */
+      if (gameData["game-state"] === 'CHECKMATE') {
+        if (gameData["state"]["color"] === this.playerColor) {
+          this.showOutcomeModal('lose');
+        } else {
+          this.showOutcomeModal('win');
+        }
+      } else if (gameData["game-state"] === 'DRAW') {
+        this.showOutcomeModal('draw');
+      }
 
       this.position = gameData;
       this.animateState = false;
