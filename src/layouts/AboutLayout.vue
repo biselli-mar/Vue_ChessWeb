@@ -1,6 +1,6 @@
 <template>
   <q-layout view="hHh LpR lfr">
-    <NavBar />
+    <MobileNavBar />
     <SideBar @scroll-to-subsection="scrollToSubsection" />
     <q-page-container>
       <router-view />
@@ -10,14 +10,14 @@
 
 <script>
 import { defineComponent } from 'vue'
-import NavBar from 'components/nav/NavBar.vue'
+import MobileNavBar from 'components/nav/MobileNavBar.vue'
 import SideBar from 'components/about/SideBar.vue'
 
 export default defineComponent({
   name: 'MainLayout',
 
   components: {
-    NavBar,
+    MobileNavBar,
     SideBar,
   },
   methods: {
