@@ -13,6 +13,7 @@
 <script>
 import { defineComponent, computed } from 'vue'
 import { useQuasar, Cookies } from 'quasar';
+import { NetworkHandler } from 'src/assets/scripts/networkHandler';
 
 export default defineComponent({
   name: 'CreateSessionCard',
@@ -59,19 +60,26 @@ export default defineComponent({
 
     return {
       joinSession(router) {
-        $q.dialog({
-          title: 'Join Session',
-          message: 'Enter the session ID to join',
-          prompt: {
-            model: '',
-            type: 'text',
-          },
-          color: computedDialogColor.value,
-          cancel: true,
-          persistent: true,
-        }).onOk(data => {
-          postRequest(data, router);
-        });
+        if (NetworkHandler.isOffline()) {
+          $q.notify({
+            message: 'You are offline. Please connect to the internet to create a session.',
+            type: 'negative',
+          });
+        } else {
+          $q.dialog({
+            title: 'Join Session',
+            message: 'Enter the session ID to join',
+            prompt: {
+              model: '',
+              type: 'text',
+            },
+            color: computedDialogColor.value,
+            cancel: true,
+            persistent: true,
+          }).onOk(data => {
+            postRequest(data, router);
+          });
+        }
       },
       cardImage: computed(() => {
         if ($q.dark.isActive) {

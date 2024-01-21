@@ -13,6 +13,7 @@
 <script>
 import { defineComponent, computed } from 'vue'
 import { useQuasar } from 'quasar';
+import { NetworkHandler } from 'src/assets/scripts/networkHandler.js';
 import CreateSessionDialog from './CreateSessionDialog.vue'
 
 export default defineComponent({
@@ -28,12 +29,19 @@ export default defineComponent({
     const baseCardPath = 'img/w_king_card';
     return {
       createSession() {
-        $q.dialog({
-          component: CreateSessionDialog,
-          componentProps: {
-            serverUrl: props.serverUrl,
-          },
-        });
+        if (NetworkHandler.isOffline()) {
+          $q.notify({
+            message: 'You are offline. Please connect to the internet to create a session.',
+            type: 'negative',
+          });
+        } else {
+          $q.dialog({
+            component: CreateSessionDialog,
+            componentProps: {
+              serverUrl: props.serverUrl,
+            },
+          });
+        }
       },
       cardImage: computed(() => {
         if ($q.dark.isActive) {
