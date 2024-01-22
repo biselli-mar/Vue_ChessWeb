@@ -47,7 +47,15 @@ export default defineComponent({
         message: 'Fetching Session data...',
       })
       fetch(props.serverUrl, getRequestObj(sessionId))
-        .then(async response => await response.json())
+        .then(async response => {
+          if (!response.ok) {
+            if (response.status === 400) {
+              throw new Error('Invalid Session ID')
+            }
+            throw new Error(response.statusText)
+          }
+          return await response.json()
+        })
         .then(data => handleSessionData(data))
         .then(() => {
           $q.loading.hide();
@@ -55,9 +63,16 @@ export default defineComponent({
         })
         .catch(error => {
           $q.loading.hide();
+          let message = 'Something went wrong. Check the session ID or try again later.';
+          if (error.message === 'Invalid Session ID') {
+            message = 'Invalid Session ID. Please check the session ID and try again.';
+          }
           $q.notify({
-            message: 'Something went wrong. Check the session ID or try again later.',
+            message: message,
             type: 'negative',
+            actions: [
+              { label: 'Dismiss', color: 'white', handler: () => { /* ... */ } }
+            ]
           });
           console.error(error)
         });

@@ -90,7 +90,13 @@ export default defineComponent({
         message: 'Creating Session...',
       })
       fetch(props.serverUrl, getRequestObj(playAsWhite))
-        .then(async response => await response.json())
+        .then(async response => {
+          console.log(response);
+          if (!response.ok) {
+            throw new Error(response.statusText);
+          }
+          return await response.json()
+        })
         .then(data => handleSessionData(data))
         .then(() => {
           $q.loading.hide();
@@ -101,6 +107,9 @@ export default defineComponent({
           $q.notify({
             message: 'Something went wrong. Please try again later.',
             type: 'negative',
+            actions: [
+              { label: 'Dismiss', color: 'white', handler: () => { /* ... */ } }
+            ]
           });
           console.error(error)
         });
