@@ -24,12 +24,13 @@
 <script>
 import { ref, defineComponent } from 'vue';
 import { HintSquareEl } from 'assets/scripts/customElements.js';
-import { Cookies } from 'quasar';
+import { Cookies, useQuasar } from 'quasar';
 import { getPositionDiff } from 'assets/scripts/game/position.js';
 import HighlightSquare from './HighlightSquare.vue';
 import ChessCoordinates from './ChessCoordinates.vue';
 import ChessPiece from './ChessPiece.vue';
 import ChessModal from './ChessModal.vue';
+import { timeout } from 'workbox-core/_private';
 
 const audioFiles = [
   { id: 'move-sound', src: process.env.REPO_NAME + '/sounds/move.mp3' },
@@ -125,11 +126,15 @@ export default defineComponent({
       };
 
       this.varSocket.send(JSON.stringify(move));
+      this.legalMoves = {};
+      this.waitingTurn = true;
+      this.showLoading('Processing move...');
     },
     showOutcomeModal(outcome) {
       this.$refs.chessModal.openModal(outcome);
     },
     processMove(gameData) {
+      this.hideLoading();
       const from = gameData["move"]["from"];
       const to = gameData["move"]["to"];
 
@@ -231,6 +236,7 @@ export default defineComponent({
     }
   },
   async setup(props) {
+    const $q = useQuasar();
     console.log("ChessBoard setup")
     const getPlayerSateUrl = process.env.BACKEND_URL + '/session/player-state?sessionId=' + Cookies.get('CHESS_SESSION_ID') + '&playerId=' + Cookies.get('CHESS_PLAYER_ID');
     const playerStatePromise = await fetch(getPlayerSateUrl);
@@ -257,6 +263,16 @@ export default defineComponent({
     if (playerColor === 'b') {
       chessBoardClass += ' flipped';
     }
+
+    function showLoading(message) {
+      $q.loading.show({
+        delay: 500,
+        message: message,
+      });
+    }
+    function hideLoading() {
+      $q.loading.hide();
+    }
     return {
       chessBoard,
       chessBoardClass,
@@ -269,6 +285,8 @@ export default defineComponent({
       initialPieces,
       playerColor,
       audioFiles,
+      showLoading,
+      hideLoading,
     }
   },
   emits: [
