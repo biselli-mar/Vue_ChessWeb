@@ -43,11 +43,24 @@ export default defineComponent({
       Cookies.set('CHESS_PLAYER_ID', data.player, { sameSite: 'Strict', path: '/' });
     }
     function postRequest(sessionId, router) {
+      $q.loading.show({
+        message: 'Fetching Session data...',
+      })
       fetch(props.serverUrl, getRequestObj(sessionId))
         .then(async response => await response.json())
         .then(data => handleSessionData(data))
-        .then(() => router.push({ name: 'play' }))
-        .catch(error => console.error(error));
+        .then(() => {
+          $q.loading.hide();
+          router.push({ name: 'play' })
+        })
+        .catch(error => {
+          $q.loading.hide();
+          $q.notify({
+            message: 'Something went wrong. Check the session ID or try again later.',
+            type: 'negative',
+          });
+          console.error(error)
+        });
     }
 
     const computedDialogColor = computed(() => {

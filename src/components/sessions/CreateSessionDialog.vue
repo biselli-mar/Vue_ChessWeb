@@ -42,7 +42,7 @@
 
 <script>
 import { defineComponent } from 'vue';
-import { useDialogPluginComponent, Cookies } from 'quasar';
+import { useDialogPluginComponent, Cookies, useQuasar } from 'quasar';
 
 export default defineComponent({
   name: 'CreateSessionDialog',
@@ -60,6 +60,7 @@ export default defineComponent({
   ],
 
   setup(props) {
+    const $q = useQuasar();
     // REQUIRED; must be called inside of setup()
     const { dialogRef, onDialogHide, onDialogOK, onDialogCancel } = useDialogPluginComponent()
     // dialogRef      - Vue ref to be applied to QDialog
@@ -85,11 +86,24 @@ export default defineComponent({
       Cookies.set('CHESS_PLAYER_ID', data.player, { sameSite: 'Strict', path: '/' });
     }
     function postRequest(playAsWhite, router) {
+      $q.loading.show({
+        message: 'Creating Session...',
+      })
       fetch(props.serverUrl, getRequestObj(playAsWhite))
         .then(async response => await response.json())
         .then(data => handleSessionData(data))
-        .then(() => router.push({ name: 'play' }))
-        .catch(error => console.error(error));
+        .then(() => {
+          $q.loading.hide();
+          router.push({ name: 'play' })
+        })
+        .catch(error => {
+          $q.loading.hide();
+          $q.notify({
+            message: 'Something went wrong. Please try again later.',
+            type: 'negative',
+          });
+          console.error(error)
+        });
     }
 
     return {

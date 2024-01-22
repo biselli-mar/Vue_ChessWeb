@@ -5,9 +5,14 @@
   <div :class="'game-container' + orientation" id="game" ref="gameContainer">
     <div class="chess-layout">
       <div class="board-container shadow-12">
-        <Suspense>
-          <ChessBoard v-bind="boardProps" @game-started="onGameStarted" />
-        </Suspense>
+        <KeepAlive>
+          <Suspense>
+            <ChessBoard v-bind="boardProps" @game-started="onGameStarted" />
+            <template #fallback>
+              <q-spinner color="primary" size="3em" />
+            </template>
+          </Suspense>
+        </KeepAlive>
       </div>
     </div>
   </div>
